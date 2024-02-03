@@ -28,7 +28,7 @@ def create():
     with open("data\Campers.json", "w") as file:
         json.dump(data, file, indent = 4)
 
-def read():
+def read(codigo = None):
     with open("data/Campers.json", "r") as file:
         data = json.load(file)
     titulo = """
@@ -37,22 +37,44 @@ def read():
      ------------------------
 """
     print(titulo)
-    for key, value in data.items():
+    if(codigo == None):
+        for key, value in data.items():
+            print(f"""
+        -----------------------------
+        Identificacion : {key}
+        Nombre : {value.get("nombre")}
+        Apellido : {value.get("apellido")}
+        Direccion : {value.get("direccion")}
+        Edad : {value.get("edad")}
+        Estado : {value.get("estado")}
+        Contacto {value.get("contacto")}
+        Acudiente : {value.get("acudiente")["nombre"]}, Cedula acudiente : {value.get("acudiente")["cedula"]}
+    """)
+        os.system("pause")
+    else:
+        identificacion = data.get(codigo)
         print(f"""
-    -----------------------------
-    Identificacion : {key}
-    Nombre : {value.get("nombre")}
-    Apellido : {value.get("apellido")}
-    Direccion : {value.get("direccion")}
-    Edad : {value.get("edad")}
-    Estado : {value.get("estado")}
-    Contacto {value.get("contacto")}
-    Acudiente : {value.get("acudiente")["nombre"]}, Cedula acudiente : {value.get("acudiente")["cedula"]}
-""")
-    os.system("pause")
-    
+        -----------------------------
+        Identificacion : {codigo}
+        Nombre : {identificacion.get("nombre")}
+        Apellido : {identificacion.get("apellido")}
+        Direccion : {identificacion.get("direccion")}
+        Edad : {identificacion.get("edad")}
+        Estado : {identificacion.get("estado")}
+        Contacto {identificacion.get("contacto")}
+        Acudiente : {identificacion.get("acudiente")["nombre"]}, Cedula acudiente : {identificacion.get("acudiente")["cedula"]}
+    """)
 def update():
-    pass
+    while True:
+        print("""
+     -------------------------
+    |   Actualizar un camper  |
+     -------------------------
+""")
+        read()
+        tarjeta = input("Ingrese la identificacion del camper que desea eliminar -> ")
+        read(tarjeta)
+        os.system("pause")
 def delete():
     pass
 def menu():
