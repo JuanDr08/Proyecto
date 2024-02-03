@@ -29,7 +29,28 @@ def create():
         json.dump(data, file, indent = 4)
 
 def read():
-    pass
+    with open("data/Campers.json", "r") as file:
+        data = json.load(file)
+    titulo = """
+     ------------------------
+    |   Busqueda De Campers  |
+     ------------------------
+"""
+    print(titulo)
+    for key, value in data.items():
+        print(f"""
+    -----------------------------
+    Identificacion : {key}
+    Nombre : {value.get("nombre")}
+    Apellido : {value.get("apellido")}
+    Direccion : {value.get("direccion")}
+    Edad : {value.get("edad")}
+    Estado : {value.get("estado")}
+    Contacto {value.get("contacto")}
+    Acudiente : {value.get("acudiente")["nombre"]}, Cedula acudiente : {value.get("acudiente")["cedula"]}
+""")
+    os.system("pause")
+    
 def update():
     pass
 def delete():
