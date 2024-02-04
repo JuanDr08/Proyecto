@@ -1,11 +1,10 @@
 import os, json
 def create():
-    titulo = """
+    print("""
      --------------------------------------
     |   Formulario Para Registrar Camper   |
      --------------------------------------
-"""
-    print(titulo)
+""")
     with open("data\Campers.json", "r") as file:
         data = json.load(file)
 
@@ -27,19 +26,17 @@ def create():
 
     with open("data\Campers.json", "w") as file:
         json.dump(data, file, indent = 4)
+        file.close()
 
 def read(codigo = None):
-    os.system("cls")
     with open("data/Campers.json", "r") as file:
         data = json.load(file)
-    titulo = """
+    if(codigo == None):
+        print("""
      ------------------------
     |   Busqueda De Campers  |
      ------------------------
-""" 
-    if(codigo == None):
-        os.system("cls")
-        print(titulo)
+""" )
         for key, value in data.items():
             print(f"""
         -----------------------------
@@ -66,15 +63,16 @@ def read(codigo = None):
         Acudiente : {data[codigo].get("acudiente")["nombre"]}, Cedula acudiente : {data[codigo].get("acudiente")["cedula"]}
     """)
 def update(): # add the system to change the contact and to change the accudient, check the print error
-    os.system("cls")
     while True:
+        os.system("cls")
+        read()
+        tarjeta = input("Ingrese la identificacion del camper que desea modificar -> ")
+        os.system("cls")
         print("""
      -------------------------
     |   Actualizar un camper  |
      -------------------------
     """)
-        read()
-        tarjeta = input("Ingrese la identificacion del camper que desea modificar -> ")
         read(tarjeta)
         print("""
 ¿Esta seguro que desea actualizar al camper?
@@ -82,36 +80,42 @@ def update(): # add the system to change the contact and to change the accudient
         2. No
         3.Cancelar
     """)
-        opc = int(input("Ingrese la opcion correspondiente -> "))
-        match(opc):
-            case 1:
-                with open("data\Campers.json", "r") as file:
-                    data = json.load(file)
-                actu = input("Que desea actualizar del camper? -> ").lower()
-                if (actu == "edad"):
-                    data[tarjeta][actu] = int(input("ingrese la nueva informacion -> "))
-                else:
-                    data[tarjeta][actu] = input("ingrese la nueva informacion -> ").upper()
-                with open("data\Campers.json", "w") as file:
-                    json.dump(data, file, indent = 4)
-                os.system("cls")
-                input("Camper modificado exitosamente... ")
-                read(tarjeta)
-                break
-            case 3:
-                os.system("cls")
-                input("Volviendo...")
-                break
+        try:
+            opc = int(input("Ingrese la opcion correspondiente -> "))
+            match(opc):
+                case 1:
+                    os.system("cls")
+                    with open("data\Campers.json", "r") as file:
+                        data = json.load(file)
+                    actu = input("Que desea actualizar del camper? -> ").lower()
+                    if (actu == "edad"):
+                        data[tarjeta][actu] = int(input("ingrese la nueva informacion -> "))
+                    else:
+                        data[tarjeta][actu] = input("ingrese la nueva informacion -> ").upper()
+                    with open("data\Campers.json", "w") as file:
+                        json.dump(data, file, indent = 4)
+                    os.system("cls")
+                    read(tarjeta)
+                    input("Camper modificado exitosamente... ")
+                    break
+                case 3:
+                    os.system("cls")
+                    input("Volviendo...")
+                    break
+        except ValueError:
+            os.system("cls")
+            input("Ingrese una opcion valida...")
 def delete():
-    os.system("cls")
     while True:
+        os.system("cls")
+        read()
+        tarjeta = input("Ingrese la identificacion del camper que desea eliminar -> ")
+        os.system("cls")
         print("""
      -----------------------
     |   Eliminar un camper  |
      -----------------------
     """)
-        read()
-        tarjeta = input("Ingrese la identificacion del camper que desea eliminar -> ")
         read(tarjeta)
         print("""
 ¿Esta seguro que desea actualizar al camper?
@@ -119,21 +123,25 @@ def delete():
         2. No
         3.Cancelar
     """)
-        opc = int(input("Ingrese la opcion correspondiente -> "))
-        match(opc):
-            case 1:
-                with open("data\Campers.json", "r") as file:
-                    data = json.load(file)
-                data.pop(tarjeta)
-                with open("data\Campers.json", "w") as file:
-                    json.dump(data, file, indent = 4)
-                os.system("cls")
-                input("Camper eliminado exitosamente... ")
-                break
-            case 3:
-                os.system("cls")
-                input("Volviendo...")
-                break
+        try:
+            opc = int(input("Ingrese la opcion correspondiente -> "))
+            match(opc):
+                case 1:
+                    with open("data\Campers.json", "r") as file:
+                        data = json.load(file)
+                    data.pop(tarjeta)
+                    with open("data\Campers.json", "w") as file:
+                        json.dump(data, file, indent = 4)
+                    os.system("cls")
+                    input("Camper eliminado exitosamente... ")
+                    break
+                case 3:
+                    os.system("cls")
+                    input("Volviendo...")
+                    break
+        except ValueError:
+            os.system("cls")
+            input("Ingrese una opcion valida...")
 def menu():
     titulo = """
      -----------------------------------
