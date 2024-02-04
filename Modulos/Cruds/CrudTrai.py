@@ -9,13 +9,34 @@ def create():
     with open("data\Trainers.json", "r") as file:
         data = json.load(file)
     data.update({input("Ingrese el numero de identificacion del trainer -> ") : {
-        "nombre" : input("Ingrese nombre completo del trainer -> ")
+        "nombre" : input("Ingrese nombre completo del trainer -> ").upper()
     }})
     with open("data\Campers.json", "w") as file:
         json.dump(data, file, indent = 4)
         file.close()
-def read():
-    pass
+def read(codigo = None):
+    os.system("cls")
+    with open("data\Trainers.json", "r") as file:
+        data = json.loads(file)
+    if(codigo == None):
+        print("""
+     -------------------------
+    |   Busqueda De Trainers  |
+     -------------------------
+""" )
+        for key, value in data.items():
+            print(f"""
+    -----------------------------
+    Identificacion : {key}
+    Nombre Completo : {value.get("nombre")}
+""")
+        os.system("pause")
+    else:
+        print(f"""
+    -----------------------------
+    Identificacion : {codigo}
+    Nombre Completo : {data[codigo].get("nombre")}
+""")    
 def update():
     pass
 def delete():
