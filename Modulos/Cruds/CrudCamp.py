@@ -54,7 +54,7 @@ def read(codigo = None):
     """)
         os.system("pause")
     else:
-        input(f"""
+        print(f"""
         -----------------------------
         Identificacion : {codigo}
         Nombre : {data[codigo].get("nombre")}
@@ -162,12 +162,9 @@ def menu():
                     delete()
                 case 5:
                     os.system("cls")
-                    print("volviendo al menu principal...")
-                    os.system("pause")
+                    input("volviendo al menu principal...")
                     break
                 case _:
-                    print("- Ingrese una opcion de las disponibles")
-                    os.system("pause")
+                    input("- Ingrese una opcion de las disponibles")
         except ValueError:
-            print("- Ingrese un dato valido")
-            os.system("pause")
+            input("- Ingrese un dato valido")
