@@ -77,10 +77,10 @@ def update(): # add the system to change the contact and to change the accudient
         tarjeta = input("Ingrese la identificacion del camper que desea modificar -> ")
         read(tarjeta)
         print("""
-    ¿Esta seguro que desea actualizar al camper?
-            1. Si
-            2. No
-            3.Cancelar
+¿Esta seguro que desea actualizar al camper?
+        1. Si
+        2. No
+        3.Cancelar
     """)
         opc = int(input("Ingrese la opcion correspondiente -> "))
         match(opc):
@@ -99,9 +99,41 @@ def update(): # add the system to change the contact and to change the accudient
                 read(tarjeta)
                 break
             case 3:
+                os.system("cls")
+                input("Volviendo...")
                 break
 def delete():
     os.system("cls")
+    while True:
+        print("""
+     -----------------------
+    |   Eliminar un camper  |
+     -----------------------
+    """)
+        read()
+        tarjeta = input("Ingrese la identificacion del camper que desea eliminar -> ")
+        read(tarjeta)
+        print("""
+¿Esta seguro que desea actualizar al camper?
+        1. Si
+        2. No
+        3.Cancelar
+    """)
+        opc = int(input("Ingrese la opcion correspondiente -> "))
+        match(opc):
+            case 1:
+                with open("data\Campers.json", "r") as file:
+                    data = json.load(file)
+                data.pop(tarjeta)
+                with open("data\Campers.json", "w") as file:
+                    json.dump(data, file, indent = 4)
+                os.system("cls")
+                input("Camper eliminado exitosamente... ")
+                break
+            case 3:
+                os.system("cls")
+                input("Volviendo...")
+                break
 def menu():
     titulo = """
      -----------------------------------
