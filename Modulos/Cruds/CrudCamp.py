@@ -101,7 +101,7 @@ def update(): # add the system to change the contact and to change the accudient
             case 3:
                 break
 def delete():
-    pass
+    os.system("cls")
 def menu():
     titulo = """
      -----------------------------------
