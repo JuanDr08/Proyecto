@@ -32,13 +32,51 @@ def read(codigo = None):
 """)
         os.system("pause")
     else:
+        os.system("cls")
+        print("""
+     ------------------------
+    |   Actualizar  trainer  |
+     ------------------------
+""")
         print(f"""
     -----------------------------
     Identificacion : {codigo}
     Nombre Completo : {data[codigo].get("nombre")}
 """)    
 def update():
-    pass
+    os.system("cls")
+    while True:
+        read()
+        tarjeta = input("Ingrese la identificacion del trainer que desea modificar -> ")
+        read(tarjeta)
+        print("""
+¿Esta seguro que desea actualizar al trainer?
+        1. Si
+        2. No
+        3.Cancelar
+""")
+        try:
+            opc = int(input("Ingrese la opcion correspondiente -> "))
+            match(opc):
+                case 1:
+                    os.system("cls")
+                    input("Solo puede cambiar el nombre -> ")
+                    with open("data\Trainers.json", "r") as file:
+                        data = json.loads(file)
+                    data[tarjeta]["nombre"] = input("Ingrese el cambio de nombre del trainer -> ")
+                    with open("data\Campers.json", "w") as file:
+                        json.dump(data, file, indent = 4)
+                        file.close()
+                case 3:
+                    os.system("cls")
+                    input("Volviendo...")
+                    break
+                case _:
+                    os.system("cls")
+                    input("Ingrese una opcion disponible...")
+        except ValueError:
+            os.system("cls")
+            input("ingrese una opcion valida...")
 def delete():
     pass
 def menu():
