@@ -11,13 +11,12 @@ def create():
     data.update({input("Ingrese el numero de identificacion del trainer -> ") : {
         "nombre" : input("Ingrese nombre completo del trainer -> ").upper()
     }})
-    with open("data\Campers.json", "w") as file:
+    with open("data\Trainers.json", "w") as file:
         json.dump(data, file, indent = 4)
         file.close()
 def read(codigo = None):
-    os.system("cls")
     with open("data\Trainers.json", "r") as file:
-        data = json.loads(file)
+        data = json.load(file)
     if(codigo == None):
         print("""
      -------------------------
@@ -32,22 +31,22 @@ def read(codigo = None):
 """)
         os.system("pause")
     else:
-        os.system("cls")
-        print("""
-     ------------------------
-    |   Actualizar  trainer  |
-     ------------------------
-""")
         print(f"""
     -----------------------------
     Identificacion : {codigo}
     Nombre Completo : {data[codigo].get("nombre")}
 """)    
 def update():
-    os.system("cls")
     while True:
+        os.system("cls")
         read()
         tarjeta = input("Ingrese la identificacion del trainer que desea modificar -> ")
+        os.system("cls")
+        print("""
+     ------------------------
+    |   Actualizar  trainer  |
+     ------------------------
+""")
         read(tarjeta)
         print("""
 ¿Esta seguro que desea actualizar al trainer?
@@ -62,23 +61,59 @@ def update():
                     os.system("cls")
                     input("Solo puede cambiar el nombre -> ")
                     with open("data\Trainers.json", "r") as file:
-                        data = json.loads(file)
-                    data[tarjeta]["nombre"] = input("Ingrese el cambio de nombre del trainer -> ")
-                    with open("data\Campers.json", "w") as file:
+                        data = json.load(file)
+                    data[tarjeta]["nombre"] = input("Ingrese el cambio de nombre del trainer -> ").upper()
+                    with open("data\Trainers.json", "w") as file:
                         json.dump(data, file, indent = 4)
                         file.close()
+                    os.system("cls")
+                    read(tarjeta)
+                    input("Trainer modificado exitosamente... ")
+                    break
                 case 3:
                     os.system("cls")
                     input("Volviendo...")
                     break
-                case _:
-                    os.system("cls")
-                    input("Ingrese una opcion disponible...")
         except ValueError:
             os.system("cls")
-            input("ingrese una opcion valida...")
+            input("Ingrese una opcion valida...")
 def delete():
-    pass
+    while True:
+        os.system("cls")
+        read()
+        tarjeta = input("Ingrese la identificacion del trainer que desea eliminar -> ")
+        os.system("cls")
+        print("""
+     ------------------------
+    |   Eliminar un trainer  |
+     ------------------------
+    """)
+        read(tarjeta)
+        print("""
+¿Esta seguro que desea eliminar al trainer?
+        1. Si
+        2. No
+        3.Cancelar
+""")
+        try:
+            opc = int(input("Ingrese la opcion correspondiente -> "))
+            match(opc):
+                case 1:
+                    with open("data\Trainers.json", "r") as file:
+                        data = json.load(file)
+                    data.pop(tarjeta)
+                    with open("data\Trainers.json", "w") as file:
+                        json.dump(data, file, indent = 4)
+                    os.system("cls")
+                    input("Camper eliminado exitosamente... ")
+                    break
+                case 3:
+                    os.system("cls")
+                    input("Volviendo...")
+                    break
+        except ValueError:
+            os.system("cls")
+            input("Ingrese una opcion valida...")
 def menu():
     titulo = """
      -------------------------------------
