@@ -1,7 +1,19 @@
 import os, json
 
 def create():
-    pass
+    print("""
+     --------------------------------------
+    |   Formulario Para Registrar Trainer  |
+     --------------------------------------
+""")
+    with open("data\Trainers.json", "r") as file:
+        data = json.load(file)
+    data.update({input("Ingrese el numero de identificacion del trainer -> ") : {
+        "nombre" : input("Ingrese nombre completo del trainer -> ")
+    }})
+    with open("data\Campers.json", "w") as file:
+        json.dump(data, file, indent = 4)
+        file.close()
 def read():
     pass
 def update():
@@ -24,18 +36,22 @@ def menu():
             opc = int(input("Ingrese la opcion que desea realizar -> "))
             match(opc):
                 case 1:
-                    pass
+                    os.system("cls")
+                    create()
                 case 2:
-                    pass
+                    os.system("cls")
+                    read()
                 case 3:
-                    pass
+                    os.system("cls")
+                    update()
                 case 4:
-                    pass
+                    os.system("cls")
+                    delete()
                 case 5:
                     os.system("cls")
                     input("Volviendo al menu principal...")
+                    break
                 case _:
-                    input("Porfavor ingrese una opcion valida")
+                    input("- Porfavor ingrese una opcion valida")
         except ValueError:
-            print("Porfavor ingrese un dato valido...")
-            os.system("pause")
+            input("- Porfavor ingrese un dato valido...")
