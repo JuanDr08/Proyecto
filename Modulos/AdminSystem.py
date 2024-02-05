@@ -45,35 +45,43 @@ def pruebas():
 def ruta():
     with open("data\Coordinacion.json", "r") as file:
         data = json.load(file)
-    input("Para crear una ruta debera tener modulos creados, lo primero que hara sera crear los modulos a asignar (enter para continuar)")
-    os.system("cls")
-    for x in range(int(input("Cuantos modulos desea agregar? -> "))):
-        os.system("cls")
-        data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
-            input(f"Ingrese el nombre del modulo {x + 1} -> ").lower() : input("Ingrese el temario -> ").upper()for x in range(5)
-        }})
-    os.system("cls")
-    if (len(data.get("modulos")) >= 1):
-        print("Modulos disponibles para asignar a la ruta...")
-        for key, value in data.get("modulos").items():
-            print(f"""
-    Codigo : {key}
-""")        
-            contador = 1
-            for key2, val in data.get("modulos")[key].items():
-                print(f"""
-        Temario {contador} = {key2} : {val}
+    print(f"""
+    **************
+    *    LEER    *
+    **************
 """)
-                contador += 1
-        data.get("rutas").update({input("Ingrese el nombre de la ruta (programa al que estara orientado el aprendizaje) -> ").lower(): {
-            "modulo" : data.get("modulos")[input("Ingrese el codigo de los modulos que asignara a esta ruta -> ")]
-        }})
+    input("Para crear una ruta debera tener modulos creados, lo primero que hara sera crear los modulos a asignar (enter para continuar)")
+    input("Cada modulo tiene 5 submodulos, los cuales son los pasos a seguir para completar el modulo")
+    os.system("cls")
+    if (input("Desea crear modulos o usar modulos ya creados? (1. si enter. no) ->")):
+        for x in range(int(input("Cuantos modulos desea agregar? -> "))):
+            os.system("cls")
+            data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
+                input(f"Ingrese el nombre del modulo {x + 1} -> ").lower() : input("Ingrese el temario -> ").upper()for x in range(5)
+            }})
     else:
         os.system("cls")
-        input("No hay modulos creados para poder crear una ruta...")
-    with open("data\Coordinacion.json", "w") as file:
-        json.dump(data, file, indent = 4)
-    input("Ruta creada exitosamente")
+        if (len(data.get("modulos")) >= 1):
+            print("Modulos disponibles para asignar a la ruta...")
+            for key, value in data.get("modulos").items():
+                print(f"""
+        Codigo : {key}
+    """)        
+                contador = 1
+                for key2, val in data.get("modulos")[key].items():
+                    print(f"""
+            Temario {contador} = {key2} : {val}
+    """)
+                    contador += 1
+            data.get("rutas").update({input("Ingrese el nombre de la ruta (programa al que estara orientado el aprendizaje) -> ").lower(): {
+                "modulo" : data.get("modulos")[input("Ingrese el codigo de los modulos que asignara a esta ruta -> ")]
+            }})
+            with open("data\Coordinacion.json", "w") as file:
+                json.dump(data, file, indent = 4)
+            input("Ruta creada exitosamente")
+        else:
+            os.system("cls")
+            input("No hay modulos disponibles para poder crear una ruta...")
 def rooms():
     pass
 def giveroom():
