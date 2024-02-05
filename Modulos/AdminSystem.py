@@ -43,7 +43,34 @@ def selection():
 def pruebas():
     pass
 def ruta():
-    pass
+    with open("data\Coordinacion.json", "r") as file:
+        data = json.load(file)
+    input("Para crear una ruta debera tener modulos creados, lo primero que hara sera crear los modulos a asignar (enter para continuar)")
+    input("Cada ruta debe tener 5 modulos asignados, por lo que debera crear 5 con el temario de su gusto")
+    os.system("cls")
+    data.get("modulos").update({input("Ingrese el codigo del modulo (Ej: 0001) -> ") : {
+        input(f"Ingrese el nombre del modulo {x + 1} -> ").upper() : input("Ingrese el temario -> ").upper()for x in range(5)
+    }})
+    if (len(data.get("modulos")) >= 1):
+        os.system("cls")
+        print("Modulos disponibles para asignar a la ruta...")
+        for key, value in data.get("modulos").items():
+            print(f"""
+    Codigo : {key}
+""")
+            for key2, val in data.get("modulos")[key].items():
+                print(f"""
+        Temario : {key2} : {val}
+""")
+        data.get("rutas").update({input("Ingrese el nombre de la ruta (progra al que estara orientado el aprendizaje) -> "): {
+            "modulos" : {}
+        }})
+    else:
+        os.system("cls")
+        input("No hay modulos creados para poder crear una ruta...")
+
+    
+    
 def rooms():
     pass
 def giveroom():
