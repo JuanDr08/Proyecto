@@ -59,6 +59,7 @@ def ruta():
             data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
                 input(f"Ingrese el nombre del modulo {x + 1} -> ").lower() : input("Ingrese el temario -> ").upper()for x in range(5)
             }})
+        input("Modulo creado exitosamente, falta agregarlo a una ruta")
     else:
         os.system("cls")
         if (len(data.get("modulos")) >= 1):
@@ -76,13 +77,53 @@ def ruta():
             data.get("rutas").update({input("Ingrese el nombre de la ruta (programa al que estara orientado el aprendizaje) -> ").lower(): {
                 "modulo" : data.get("modulos")[input("Ingrese el codigo de los modulos que asignara a esta ruta -> ")]
             }})
-            with open("data\Coordinacion.json", "w") as file:
-                json.dump(data, file, indent = 4)
             input("Ruta creada exitosamente")
         else:
             os.system("cls")
             input("No hay modulos disponibles para poder crear una ruta...")
+    with open("data\Coordinacion.json", "w") as file:
+        json.dump(data, file, indent = 4)
 def rooms():
-    pass
+    with open("data\Coordinacion.json", "r") as file:
+        data = json.load(file)
+    try:
+        sala = input("Ingrese el nombre de la sala -> ").lower()
+        if (sala not in data.get("rooms")):
+            data.get("rooms").update({sala : {
+                "capacidad" : int(input("Ingrese la capacidad maxima de la sala -> ")),
+                "estado" : "VACIO"
+            }})
+            with open("data\Coordinacion.json", "w") as file:
+                json.dump(data, file, indent = 4)
+                file.close()
+        else:
+            os.system("cls")
+            input("La sala ya existe, pruebe otro nombre")
+    except ValueError:
+        os.system("cls")
+        input("Ingrese un digito correto")
 def giveroom():
-    pass
+    with open("data\Campers.json", "r") as file:
+        camp = json.load(file)
+    with open("data\Trainers.json", "r") as file:
+        trai = json.load(file)
+    with open("data\Coordinacion.json", "r") as file:
+        admin = json.load(file)
+    if(len(camp) < 1):
+        input("No hay campers registrados para poder asignar a salas de entrenamiento")
+    elif(len(trai) < 1):
+        input("No hay trainers registrados para poder asignar a una sala de entrenamiento")
+    elif(len(admin.get("rutas")) < 1):
+        input("No hay rutas creadas para poder asignar a una sala de entrenamiento")
+    elif(len(admin.get("rooms")) < 1):
+        input("No hay aulas creadas para poder asignar un entorno de entrenamiento")
+    else:
+        input("Para asignar una sala se le pediran unos datos paso por paso, porfavor sigalos al pie de la letra")
+        os.system("cls")
+        input("Primero asignara la ruta")
+        print("Rutas disponibles")
+        for key, value in admin.get("rutas").items():
+            print(f"Ruta : {key}") 
+        admin.get("classrooms").update({input("Ingrese el codigo de la sala (inicial de la ruta y veces asignada la ruta)-> ") : {
+            "ruta" : input("Ingrese la ruta que veran los miembros de la sala -> ") 
+        }})
