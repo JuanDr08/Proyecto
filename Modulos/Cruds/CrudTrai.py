@@ -8,8 +8,14 @@ def create():
 """)
     with open("data\Trainers.json", "r") as file:
         data = json.load(file)
+    with open("data\Coordinacion.json", "r") as file:
+        dato = json.load(file)
     data.update({input("Ingrese el numero de identificacion del trainer -> ") : {
-        "nombre" : input("Ingrese nombre completo del trainer -> ").upper()
+        "nombre" : input("Ingrese nombre completo del trainer -> ").upper(),
+        "6-9" : "VACIO",
+        "10-1" : "VACIO",
+        "2-5" : "VACIO",
+        "6-10" : "VACIO"
     }})
     with open("data\Trainers.json", "w") as file:
         json.dump(data, file, indent = 4)
