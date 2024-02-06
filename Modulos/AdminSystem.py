@@ -95,7 +95,9 @@ def rooms():
         if (sala not in data.get("rooms")):
             data.get("rooms").update({sala : {
                 "capacidad" : int(input("Ingrese la capacidad maxima de la sala -> ")),
-                "estado" : {}
+                "estado" : {
+                    value : "VACIO" for key, value in data.get("horarios").items()
+                }
             }})
             with open("data\Coordinacion.json", "w") as file:
                 json.dump(data, file, indent = 4)
@@ -123,8 +125,8 @@ def giveroom():
         input("No hay aulas creadas para poder asignar un entorno de entrenamiento")
     else:
         input("Para asignar una sala se le pediran unos datos paso por paso, porfavor sigalos al pie de la letra")
-        os.system("cls")
         input("Primero asignara la ruta")
+        os.system("cls")
         print("Rutas disponibles")
         for key, value in admin.get("rutas").items():
             print(f"Ruta : {key}") 
