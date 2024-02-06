@@ -129,7 +129,35 @@ def giveroom():
         os.system("cls")
         print("Rutas disponibles")
         for key, value in admin.get("rutas").items():
-            print(f"Ruta : {key}") 
-        admin.get("classrooms").update({input("Ingrese el codigo de la sala (inicial de la ruta y veces asignada la ruta)-> ") : {
-            "ruta" : input("Ingrese la ruta que veran los miembros de la sala -> ") 
-        }})
+            print(f"Ruta : {key}")
+        ruta = input("Ingrese la ruta que veran los miembros de la sala -> ").lower()
+        if (ruta not in admin["rutas"]):
+            os.system("cls")
+            input("Esa ruta no existe, porfavor ingrese una de las disponibles")
+        else:
+            counter = 1
+            admin.get("classrooms").update({ruta[0:1]+str(counter) : {
+                "ruta" : ruta 
+            }})
+            os.system("cls")
+            print("SALAS Y HORARIOS DISPONIBLES\n")
+            for key, value in admin.get("rooms").items():
+                for key2, value2 in value["estado"].items():
+                    if(value2 == "VACIO"):
+                        print(f"- Sala {key} DISPONIBLE el horario de {key2}")
+                    else:
+                        print(f"- La sala {key} esta OCUPADA en el horario {key2}")
+                print("")
+            sala = input("Ingrese la sala que quiere asignar a este grupo ").lower()
+            if(sala not in admin["rooms"]):
+                print("Esa sala no existe, ingrese una que si exista")
+            else:
+                hora = input("Ingrese la hora que quiere asignar a este grupo ").lower()
+                if(hora not in admin["rooms"][sala]["estado"]):
+                    print("Esa hora no existe, ingrese una de las que estan disponibles")
+                elif(admin["rooms"][sala]["estado"][hora] == "OCUPADA"):
+                    print("Esa hora ya esta ocupada, porfavor ingrese una que este disponible")
+                else:
+                    admin["rooms"][sala]["estado"][hora] = "OCUPADA"
+                    admin["classrooms"][ruta[0:1]+str(counter)].update({sala : hora})
+            counter += 1
