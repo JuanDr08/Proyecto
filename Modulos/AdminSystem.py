@@ -131,14 +131,15 @@ def giveroom():
             print("Rutas disponibles")
             for key, value in admin.get("rutas").items():
                 print(f"Ruta : {key}")
-            ruta = input("Ingrese la ruta que veran los miembros de la sala -> ").lower()
+            ruta = input("Ingrese la ruta que veran los miembros del grupo -> ").lower()
             if (ruta not in admin["rutas"]):
                 os.system("cls")
                 input("Esa ruta no existe, porfavor ingrese una de las disponibles")
                 break
             else:
                 counter = 1
-                admin.get("classrooms").update({ruta[0:1]+str(counter) : {
+                code = ruta[0:1]+str(counter)
+                admin.get("classrooms").update({code : {
                     "ruta" : ruta 
                 }})
                 os.system("cls")
@@ -162,7 +163,7 @@ def giveroom():
                     print("\n- Salas disponibles a esta hora\n")
                     for key, valor in admin.get("rooms").items():
                         print(f"* Sala {key} en el horario de {hora} esta {valor['estado'][hora]}")
-                    sala = input("Ingrese la sala que quiere asignar a este grupo ").lower()
+                    sala = input("Ingrese la sala que quiere asignar a este grupo -> ").lower()
                     if(hora not in trai[trainer]["horario"]):
                         os.system("cls")
                         input("Esa hora no existe, ingrese una de las que estan disponibles")
@@ -178,6 +179,50 @@ def giveroom():
                     else:
                         trai[trainer]["horario"][hora] = "OCUPADA"
                         admin["rooms"][sala]["estado"][hora] = "OCUPADA"
-                        admin["classrooms"][ruta[0:1]+str(counter)].update({trainer : trai[trainer]["nombre"]})
-                        admin["classrooms"][ruta[0:1]+str(counter)].update({sala : hora})              
+                        admin["classrooms"][code].update({
+                            trainer : trai[trainer]["nombre"],
+                            "capacidad" : admin["rooms"][sala]["capacidad"]
+                        })
+                        admin["classrooms"][code].update({sala : hora})    
+                        trai[trainer].update({code : {"sala" : sala}}) 
+                        input("Trainer, Hora y sala asignada correctamente") 
+                os.system("cls")
+                print("Ahora debera ingresar los campers que conformaran el grupo de entrenamiento")
+                input("Acontinuacion se le mostraran todos los campers que fueron aprobados de la prueba de seleccion")
+                os.system("cls")
+                if (len(admin["seleccion"]) < 1):
+                    print("No hay campers que hayan aprobado la prueba de seleccion, revise si hay campers por presentar")
+                    break
+                else:
+                    for key, val in camp.items():
+                        if(val["estado"] == "INSCRITO"):
+                            print(f"""
+                            * Identificacion : {key} Nombre : {val["nombre"]}
+                        """)
+                    print("Ingrese la identificacion de los campers que desea ingresar a la sala")
+                    bandera = True
+                    while bandera:
+                        camper = input("-> ")
+                        if(camper not in camp):
+                            input("No se ecuentran coincidencias con la identificacion registrada, ingrese un camper existente")
+                            bandera = True
+                        else:
+                            if(int(input("Esta seguro que desea agregar al camper a este aula? 1. si ENTER. no -> "))):
+                                rout = admin["classrooms"][code]["ruta"]
+                                print(rout)
+                                admin["classrooms"][code].update({camper : {
+                                    "nombre" : camp[camper]["nombre"],
+                                    "modulos" : {
+                                        key : 0 for key, value in admin["rutas"][rout]["modulo"].items()
+                                    }
+                                }})
+                                # actualizar camper a aprobado
+                                # restar por cada camper 1 a la sala asignada
+                                # guardar en json
+                                # asignar identidad del camper al trainer para relacionar camper - trainer
+                                # agregar opcion si se desea crear una sal totalmente nueva o añadir un camper a una existente
+                                bandera = bool(input("Desea añadir otro camper? (1. si ENTER. no) -> "))
+                            else:
+                                bandera = True
                 counter += 1
+                break
