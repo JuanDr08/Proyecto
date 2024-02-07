@@ -185,7 +185,8 @@ def giveroom():
                                         admin["rooms"][sala]["estado"][hora] = "OCUPADA"
                                         admin["classrooms"][code].update({
                                             "trainer" : {trainer : trai[trainer]["nombre"]},
-                                            "capacidad" : admin["rooms"][sala]["capacidad"]
+                                            "capacidad" : admin["rooms"][sala]["capacidad"],
+                                            "campers" : {}
                                         })
                                         admin["classrooms"][code].update({sala : hora})    
                                         trai[trainer].update({code : {"sala" : sala}}) 
@@ -193,8 +194,10 @@ def giveroom():
                                         counter += 1
                                         with open("data\Trainers.json", "w") as file:
                                             json.dump(trai, file, indent=4)
+                                            file.close()
                                         with open("data\Coordinacion.json", "w") as file:
                                             json.dump(admin, file, indent=4)
+                                            file.close()
                                         break
                 case 2:
                     bandera2 = True
@@ -243,19 +246,23 @@ def giveroom():
                                         os.system("cls")
                                         if(int(input("Esta seguro que desea agregar al camper a este aula?\n1. si\n0. no\n-> "))):
                                             rout = admin["classrooms"][grupo]["ruta"]
-                                            admin["classrooms"][grupo].update({"campers" : {
-                                                camper : camp[camper]["nombre"]
-                                            }})
+                                            admin["classrooms"][grupo]["campers"].update({camper : camp[camper]["nombre"]})
                                             camp[camper].update({grupo : {
-                                                "modulos" : {
-                                                    key : 0 for key, value in admin["rutas"][rout]["modulo"].items()
-                                                }
+                                                key : 0 for key, value in admin["rutas"][rout]["modulo"].items()
+                                                
                                             }})
                                             camp[camper]["estado"] = "APROBADO"
                                             admin["classrooms"][grupo]["capacidad"] -= 1
                                             admin["seleccion"][camper].update({"estado" : "APROBADO"})
-                                            # guardar en json
-                                            # asignar identidad del camper al trainer para relacionar camper - trainer
+                                            for key, value in trai.items():
+                                                if(grupo in value):
+                                                    trai[key][grupo].update({camper : camp[camper]["nombre"]})
+                                            with open("data\Campers.json", "w") as file:
+                                                json.dump(camp, file, indent = 4)
+                                            with open("data\Trainers.json", "w") as file:
+                                                json.dump(trai, file, indent = 4)
+                                            with open("data\Coordinacion.json", "w") as file:
+                                                json.dump(admin, file, indent = 4)
                                             os.system("cls")
                                             input("Camper añadido exitosamente")
                                             os.system("cls")
