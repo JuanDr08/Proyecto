@@ -197,48 +197,74 @@ def giveroom():
                                             json.dump(admin, file, indent=4)
                                         break
                 case 2:
-                    if (len(admin["classrooms"]) >= 1):
+                    bandera2 = True
+                    while bandera2:
                         os.system("cls")
-                        print("Ahora debera ingresar los campers que conformaran el grupo de entrenamiento")
-                        input("Acontinuacion se le mostraran todos los campers que fueron aprobados de la prueba de seleccion")
-                        os.system("cls")
-                        if (len(admin["seleccion"]) < 1):
-                            input("No hay campers que hayan aprobado la prueba de seleccion, revise si hay campers por presentar")
-                        else:
-                            for key, val in camp.items():
-                                if(val["estado"] == "INSCRITO"):
-                                    print(f"""
-                                    * Identificacion : {key} Nombre : {val["nombre"]}
-                                """)
-                            print("Ingrese la identificacion de los campers que desea ingresar a la sala")
-                            bandera = True
-                            while bandera:
-                                camper = input("-> ")
-                                if(camper not in camp):
-                                    input("No se ecuentran coincidencias con la identificacion registrada, ingrese un camper existente")
-                                    bandera = True
+                        if (len(admin["classrooms"]) >= 1):
+                            print("Estos son los grupos disponibles para asignar campers\n")
+                            for key, value in admin["classrooms"].items():
+                                print(f"Gupo {key} cuenta con {value['capacidad']} espacios disponibles")
+                            grupo = input("\nIngrese el grupo al que desea asignar a los campers -> ").lower()
+                            if (grupo not in admin["classrooms"]):
+                                os.system("cls")
+                                input("Ese grupo no existe, ingrese uno de los mostrados")
+                            elif(admin["classrooms"][grupo]["capacidad"] < 1):
+                                os.system("cls")
+                                input("El grupo ya no tiene capacidad para mas campers, ingrese uno que si tenga")
+                            else:
+                                contador = 0
+                                for key,value in admin["seleccion"].items():
+                                    if("estado" not in value):
+                                        pass
+                                    elif(value["estado"] == "APROBADO"):
+                                        contador += 1
+                                if(contador == len(admin["seleccion"])):
+                                    os.system("cls")
+                                    input("Los campers que aprobaron la prueba de seleccion ya se encuentran todos asignados a un grupo, por lo que no hay nada que asignar")
+                                    bandera2 = False
+                                elif (len(admin["seleccion"]) < 1):
+                                    input("No hay campers que hayan aprobado la prueba de seleccion, revise si hay campers por presentar")
+                                    bandera2 = False
                                 else:
-                                    if(int(input("Esta seguro que desea agregar al camper a este aula? 1. si ENTER. no -> "))):
-                                        rout = admin["classrooms"][code]["ruta"]
-                                        print(rout)
-                                        admin["classrooms"][code].update({"campers" : {
-                                            camper : camp[camper]["nombre"]
-                                        }})
-                                        camp[camper].update({code : {
-                                            "modulos" : {
-                                                key : 0 for key, value in admin["rutas"][rout]["modulo"].items()
-                                            }
-                                        }})
-                                        camp[camper]["estado"] = "APROBADO"
-                                        admin["classrooms"][code]["capacidad"] -= 1
-                                        # restar por cada camper 1 a la sala asignada
-                                        # guardar en json
-                                        # asignar identidad del camper al trainer para relacionar camper - trainer
-                                        bandera = bool(input("Desea añadir otro camper? (1. si ENTER. no) -> "))
+                                    os.system("cls")
+                                    for key, val in camp.items():
+                                        if(val["estado"] == "INSCRITO"):
+                                            print(f"""
+                                            * Identificacion : {key} Nombre : {val["nombre"]}
+                                        """)
+                                    camper = input("Ingrese la identificacion del camper que desea ingresar al grupo\n-> ")
+                                    if(camper not in camp):
+                                        os.system("cls")
+                                        input("No se ecuentran coincidencias con la identificacion registrada, ingrese un camper existente")
+                                    elif(camp[camper]["estado"] != "INSCRITO"):
+                                        os.system("cls")
+                                        input("Ese camper no se encuentra en el estado requerido para asignar ruta, pruebe con otro")
                                     else:
-                                        bandera = True
-                    else:
-                        input("No hay clases creadas para asignar a algun camper")
+                                        os.system("cls")
+                                        if(int(input("Esta seguro que desea agregar al camper a este aula?\n1. si\n0. no\n-> "))):
+                                            rout = admin["classrooms"][grupo]["ruta"]
+                                            admin["classrooms"][grupo].update({"campers" : {
+                                                camper : camp[camper]["nombre"]
+                                            }})
+                                            camp[camper].update({grupo : {
+                                                "modulos" : {
+                                                    key : 0 for key, value in admin["rutas"][rout]["modulo"].items()
+                                                }
+                                            }})
+                                            camp[camper]["estado"] = "APROBADO"
+                                            admin["classrooms"][grupo]["capacidad"] -= 1
+                                            admin["seleccion"][camper].update({"estado" : "APROBADO"})
+                                            # guardar en json
+                                            # asignar identidad del camper al trainer para relacionar camper - trainer
+                                            os.system("cls")
+                                            input("Camper añadido exitosamente")
+                                            os.system("cls")
+                                            bandera2 = bool(input("Desea añadir otro camper? (1. si ENTER. no) -> "))
+                                        else:
+                                            bandera2 = True
+                        else:
+                            input("No hay clases creadas para asignar a algun camper")
+                            bandera2 = False
                 case _:
                     os.system("cls")
                     input("Ingrese una opcion de las disponibles")
