@@ -128,10 +128,10 @@ def giveroom():
             add = int(input("1. Si quiere crear una sala desde cero\n2. Si quiere añadir campers a una sala ya creada\n-> "))
             match(add):
                 case 1:
+                    os.system("cls")
+                    input("Para asignar una sala se le pediran unos datos paso por paso, porfavor sigalos al pie de la letra")
+                    input("Primero asignara la ruta")
                     while True:
-                        os.system("cls")
-                        input("Para asignar una sala se le pediran unos datos paso por paso, porfavor sigalos al pie de la letra")
-                        input("Primero asignara la ruta")
                         os.system("cls")
                         print("Rutas disponibles")
                         for key, value in admin.get("rutas").items():
@@ -140,9 +140,8 @@ def giveroom():
                         if (ruta not in admin["rutas"]):
                             os.system("cls")
                             input("Esa ruta no existe, porfavor ingrese una de las disponibles")
-                            break
                         else:
-                            counter = 1
+                            counter = len(admin["classrooms"]) + 1
                             code = ruta[0:1]+str(counter)
                             admin.get("classrooms").update({code : {
                                 "ruta" : ruta 
@@ -154,45 +153,49 @@ def giveroom():
                             for key, valor in trai.items():
                                 print(f"\n- Trainer {valor['nombre']} Disponible en los siguientes horarios:\nIdentificacion del trainer: {key}\n")
                                 for key2, valor2 in trai[key].get("horario").items():
-                                    if (valor2 != "OCUPADO"):
+                                    if (valor2 != "OCUPADA"):
                                         print(f"* {key2} Libre")
                                     else:
-                                        print(f"* {key2} Ocupada")
+                                        print(f"* {key2} OCUPADA")
                             trainer = input("Ingrese la identificacion del trainer que desea que trabaje con este grupo -> ")
                             if trainer not in trai:
                                 os.system("cls")
                                 input("No se ha encontrado un trainer con esta identificacion registrada, asegurese de escribirla bien")
-                                break
                             else:
                                 hora = input("Ingrese la hora que quiere asignar a este grupo -> ").lower()
-                                print("\n- Salas disponibles a esta hora\n")
-                                for key, valor in admin.get("rooms").items():
-                                    print(f"* Sala {key} en el horario de {hora} esta {valor['estado'][hora]}")
-                                sala = input("Ingrese la sala que quiere asignar a este grupo -> ").lower()
                                 if(hora not in trai[trainer]["horario"]):
                                     os.system("cls")
                                     input("Esa hora no existe, ingrese una de las que estan disponibles")
-                                    break
-                                elif((trai[trainer]["horario"][hora] == "OCUPADA") or (admin["rooms"][sala]["estado"][hora] == "OCUPADA")):
+                                elif(trai[trainer]["horario"][hora] == "OCUPADA"):
                                     os.system("cls")
-                                    input("Esa hora ya esta ocupada, porfavor ingrese una que este disponible")
-                                    break
-                                elif(sala not in admin["rooms"]):
-                                    os.system("cls")
-                                    input("Esa sala no existe, ingrese una que si exista")
-                                    break
+                                    input("El trainer ya tiene ocupada esas hora, igrese una diferente")
                                 else:
-                                    trai[trainer]["horario"][hora] = "OCUPADA"
-                                    admin["rooms"][sala]["estado"][hora] = "OCUPADA"
-                                    admin["classrooms"][code].update({
-                                        trainer : trai[trainer]["nombre"],
-                                        "capacidad" : admin["rooms"][sala]["capacidad"]
-                                    })
-                                    admin["classrooms"][code].update({sala : hora})    
-                                    trai[trainer].update({code : {"sala" : sala}}) 
-                                    input("Trainer, Hora y sala asignada correctamente")
-                                    counter += 1
-                                    break
+                                    print("\n- Salas disponibles a esta hora\n")
+                                    for key, valor in admin.get("rooms").items():
+                                        print(f"* Sala {key} en el horario de {hora} esta {valor['estado'][hora]}")
+                                    sala = input("Ingrese la sala que quiere asignar a este grupo -> ").lower()
+                                    if(sala not in admin["rooms"]):
+                                        os.system("cls")
+                                        input("Esa sala no existe, ingrese una que si exista")
+                                    elif((admin["rooms"][sala]["estado"][hora] == "OCUPADA")):
+                                        os.system("cls")
+                                        input(f"La sala {sala} ya esta ocupada a la hora {hora}, porfavor ingrese una sala que este disponible")
+                                    else:
+                                        trai[trainer]["horario"][hora] = "OCUPADA"
+                                        admin["rooms"][sala]["estado"][hora] = "OCUPADA"
+                                        admin["classrooms"][code].update({
+                                            "trainer" : {trainer : trai[trainer]["nombre"]},
+                                            "capacidad" : admin["rooms"][sala]["capacidad"]
+                                        })
+                                        admin["classrooms"][code].update({sala : hora})    
+                                        trai[trainer].update({code : {"sala" : sala}}) 
+                                        input("Trainer, Hora y sala asignada correctamente")
+                                        counter += 1
+                                        with open("data\Trainers.json", "w") as file:
+                                            json.dump(trai, file, indent=4)
+                                        with open("data\Coordinacion.json", "w") as file:
+                                            json.dump(admin, file, indent=4)
+                                        break
                 case 2:
                     if (len(admin["classrooms"]) >= 1):
                         os.system("cls")
