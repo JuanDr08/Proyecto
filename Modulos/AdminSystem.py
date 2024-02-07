@@ -57,7 +57,7 @@ def ruta():
     input("Para crear una ruta debera tener modulos creados, lo primero que hara sera crear los modulos a asignar (enter para continuar)")
     input("Cada modulo tiene 5 submodulos, los cuales son los pasos a seguir para completar el modulo")
     os.system("cls")
-    if (input("Desea crear modulos o usar modulos ya creados? (1. si enter. no) ->")):
+    if (input("1. crear modulos\n0. usar modulos ya creados\n-> ")):
         for x in range(int(input("Cuantos modulos desea agregar? -> "))):
             os.system("cls")
             data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
@@ -141,11 +141,6 @@ def giveroom():
                             os.system("cls")
                             input("Esa ruta no existe, porfavor ingrese una de las disponibles")
                         else:
-                            counter = len(admin["classrooms"]) + 1
-                            code = ruta[0:1]+str(counter)
-                            admin.get("classrooms").update({code : {
-                                "ruta" : ruta 
-                            }})
                             os.system("cls")
                             input("Ruta añadida al grupo exitosamente")
                             os.system("cls")
@@ -181,6 +176,11 @@ def giveroom():
                                         os.system("cls")
                                         input(f"La sala {sala} ya esta ocupada a la hora {hora}, porfavor ingrese una sala que este disponible")
                                     else:
+                                        counter = len(admin["classrooms"]) + 1
+                                        code = ruta[0:1]+str(counter)
+                                        admin.get("classrooms").update({code : {
+                                            "ruta" : ruta 
+                                        }})
                                         trai[trainer]["horario"][hora] = "OCUPADA"
                                         admin["rooms"][sala]["estado"][hora] = "OCUPADA"
                                         admin["classrooms"][code].update({
@@ -211,7 +211,7 @@ def giveroom():
                             print("Estos son los grupos disponibles para asignar campers\n")
                             for key, value in admin["classrooms"].items():
                                 print(f"Gupo {key} cuenta con {value['capacidad']} espacios disponibles")
-                            grupo = input("\nIngrese el grupo al que desea asignar a los campers -> ").lower()
+                            grupo = input("\nIngrese el grupo al que desea asignar a los campers\n-> ").lower()
                             if (grupo not in admin["classrooms"]):
                                 os.system("cls")
                                 input("Ese grupo no existe, ingrese uno de los mostrados")
@@ -270,7 +270,7 @@ def giveroom():
                                             os.system("cls")
                                             input("Camper añadido exitosamente")
                                             os.system("cls")
-                                            bandera2 = bool(input("Desea añadir otro camper? (1. si ENTER. no) -> "))
+                                            bandera2 = bool(input("Desea añadir otro camper?\n1. si\n0. no\n-> "))
                                         else:
                                             bandera2 = True
                         else:
