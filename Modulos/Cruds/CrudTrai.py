@@ -12,10 +12,9 @@ def create():
         dato = json.load(file)
     data.update({input("Ingrese el numero de identificacion del trainer -> ") : {
         "nombre" : input("Ingrese nombre completo del trainer -> ").upper(),
-        "6-9" : "VACIO",
-        "10-1" : "VACIO",
-        "2-5" : "VACIO",
-        "6-10" : "VACIO"
+        "horario" : {
+            value : "VACIO" for key, value in dato.get("horarios").items()
+        }
     }})
     with open("data\Trainers.json", "w") as file:
         json.dump(data, file, indent = 4)
