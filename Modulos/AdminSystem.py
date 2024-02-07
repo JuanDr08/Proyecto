@@ -190,8 +190,8 @@ def giveroom():
                                         })
                                         admin["classrooms"][code].update({
                                             sala : hora,
-                                            "inicio" : input("Ingrese la fecha de inicio de entrenamiento de este grupo "),
-                                            "fin" : input("Ingrese la fecha de finalizacion de entrenamiento de este grupo")
+                                            "inicio" : input("Ingrese la fecha de inicio de entrenamiento de este grupo -> "),
+                                            "fin" : input("Ingrese la fecha de finalizacion de entrenamiento de este grupo -> ")
                                         })    
                                         trai[trainer].update({code : {"sala" : sala}}) 
                                         input("Trainer, Hora y sala asignada correctamente")
