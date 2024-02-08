@@ -8,6 +8,7 @@ def selection():
     if(len(data) >=1):
         input("Para realizar la prueba de seleccion acontinuacion se le mostraran todos los aspirantes disponibles")
         input("Debera asignar la nota obtenida por cada alumno uno por uno (enter para continuar)")
+        contador = 0
         for key, value in data.items():
             os.system("cls")
             if (value.get("estado")== "PRE-INSCRITO"):
@@ -32,9 +33,11 @@ def selection():
                         }                    
                     })
             else:
-                os.system("cls")
-                input("Actualmente no hay campers registrados con estado pre-inscrito")
-                break
+                contador += 1
+        if (contador == len(data) or len(data) < 1):
+            os.system("cls")
+            input("Actualmente no hay campers registrados con estado pre-inscrito")
+                
     else:
         os.system("cls")
         input("No hay ningun camper registrado")
@@ -57,7 +60,7 @@ def ruta():
     input("Para crear una ruta debera tener modulos creados, lo primero que hara sera crear los modulos a asignar (enter para continuar)")
     input("Cada modulo tiene 5 submodulos, los cuales son los pasos a seguir para completar el modulo")
     os.system("cls")
-    if (input("1. crear modulos\n0. usar modulos ya creados\n-> ")):
+    if (int(input("1. crear modulos\n0. usar modulos ya creados\n-> "))):
         for x in range(int(input("Cuantos modulos desea agregar? -> "))):
             os.system("cls")
             data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
@@ -270,7 +273,7 @@ def giveroom():
                                             os.system("cls")
                                             input("Camper añadido exitosamente")
                                             os.system("cls")
-                                            bandera2 = bool(input("Desea añadir otro camper?\n1. si\n0. no\n-> "))
+                                            bandera2 = bool(int(input("Desea añadir otro camper?\n1. si\n0. no\n-> ")))
                                         else:
                                             bandera2 = True
                         else:
