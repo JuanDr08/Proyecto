@@ -61,7 +61,7 @@ def pruebas():
             input("No hay grupos creados, debera crear al menos uno para poder crear notas")
             bandera = False
         else:
-            input("Grupos disponibles para realizar pruebas\n")
+            print("Grupos disponibles para realizar pruebas\n")
             for key, valor in admin["classrooms"].items():
                 if(len(valor["campers"]) < 1):
                     print(f"- El grupo {key} no tiene campers asignados")
@@ -71,9 +71,6 @@ def pruebas():
             if(grupo not in admin["classrooms"]):
                 os.system("cls")
                 input("El grupo que ingreso no existe, ingrese uno de los anteriormente mostrados")
-            elif(len(admin["classrooms"][grupo]["campers"]) < 1):
-                os.system("cls")
-                input(f"No puede ingresar al grupo {grupo} ya que no hay campers para realizar pruebas")
             else:
                 print(f"""
                 ***************
@@ -83,33 +80,34 @@ def pruebas():
                 input("2. Una vez decidido el modulo a calificar debera ingresarle a todos los campers del grupo sus respectivas notas")
                 os.system("cls")
                 modul = admin["classrooms"][grupo]["ruta"]
-                for key, value in admin["rutas"][modul]["modulo"].items():
-                    print(f"""
-                    Modulos disponibles
-                    --------------------------
-                    Modulo de {key}
+                print(f"""
+        Modulos disponibles
+    --------------------------
                     """)
-                modulo = input("Ingrese el nombre del modulo que desea calificar -> ").lower()
+                for key, value in admin["rutas"][modul]["modulo"].items():
+                    print("- ",key)
+                modulo = input("\nIngrese el nombre del modulo que desea calificar -> ").lower()
                 if (modulo not in admin["rutas"][modul]["modulo"]):
                     os.system("cls")
                     input(f"El modulo {modulo} no existe, porfavor ingrese uno de los disponibles")
                 else:
                     os.system("cls")
-                    input(f"Campers que presentaran las pruebas del modulo {modulo}")
+                    input(f"Campers que presentaran las pruebas del modulo {modulo}\n")
                     contador = 0
                     for key, value in camp.items():
-                        if (value[grupo][modulo] == "RATED"): # evaluar la forma de que si un camper tiene estado filtrado pase de el para no borrarle el registro de donde estuvo
+                        if (value[grupo][modulo]["estado"] == "RATED"): # evaluar la forma de que si un camper tiene estado filtrado pase de el para no borrarle el registro de donde estuvo
                             contador += 1
                         else:
-                            print(f"- Camper {value['nombre']} con identificacion {key} ")
+                            print(f"- Camper {value['nombre']} con identificacion {key}\n")
+                    os.system("pause")
                     if(contador == len(camp)):
                         os.system("cls")
                         input(f"Actualmente no hay campers del grupo {grupo} que no hayan presentado las pruebas del modulo {modulo}")
                     else:
                         for key, value in camp.items():
                             os.system("cls")
-                            if (value[grupo][modulo] == "UNRATED"):
-                                print(f"Estudiante : {valor['nombre']} identificacion : {key}")
+                            if (value[grupo][modulo]["estado"] == "UNRATED"):
+                                print(f"Estudiante : {value['nombre']} identificacion : {key}")
                                 proyecto = int(input(f"Ingrese la nota que el estudiante saco en el proyecto -> "))
                                 exam = int(input("Ingrese la nota que el estudiante saco en el examen -> "))
                                 general = int(input("Ingrese la nota total que el estudiante saco en los trabajos generales -> "))
@@ -117,12 +115,38 @@ def pruebas():
                                     "proyecto" : proyecto,
                                     "examen" : exam,
                                     "general" : general,
-                                    "total" : proyecto+exam+general/3,
+                                    "total" : (proyecto+exam+general)/3,
                                     "fecha" : input("Cuando presento el camper la prueba? -> "),
                                     "estado" : "RATED"
                                 })
-                        
-
+                                filtro = 0
+                                for key2, valor in camp[key][grupo].items():
+                                    if("total" not in valor):
+                                        pass
+                                    elif (valor["total"] < 60):
+                                        filtro += 1
+                                    if(filtro == 1):
+                                        camp[key]["estado"] = "RIESGO"
+                                    elif(filtro == 2):
+                                        camp[key]["estado"] = "FILTRADO"
+                                        camp[key][grupo].clear()
+                                        admin["classrooms"][grupo]["capacidad"] += 1
+                                        admin["classrooms"][grupo]["campers"].pop(key)
+                                        for llave, val in admin["classrooms"][grupo]["trainer"].items():
+                                            trai[llave][grupo].pop(key)
+                                        break
+                                with open("data\Campers.json", "w") as file:
+                                    json.dump(camp, file, indent = 4)
+                                    file.close()
+                                with open("data\Trainers.json", "w") as file:
+                                    json.dump(trai, file, indent = 4)
+                                    file.close()
+                                with open("data\Coordinacion.json", "w") as file:
+                                    json.dump(admin, file, indent = 4)
+                                    file.close()
+                                os.system("cls")
+                                input("Notas guardadas exitosamente")
+                                bandera = False
 def ruta():
     with open("data\Coordinacion.json", "r") as file:
         data = json.load(file)
