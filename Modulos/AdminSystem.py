@@ -48,7 +48,12 @@ def selection():
         json.dump(data, file, indent=4)
         file.close()
 def pruebas():
-    pass
+    with open("data\Campers.json", "r") as file:
+        camp = json.load(file)
+    with open("data\Trainers.json", "r") as file:
+        trai = json.load(file)
+    with open("data\Coordinacion.json", "r") as file:
+        admin = json.load(file)
 def ruta():
     with open("data\Coordinacion.json", "r") as file:
         data = json.load(file)
