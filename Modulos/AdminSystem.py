@@ -71,7 +71,11 @@ def pruebas():
             if(grupo not in admin["classrooms"]):
                 os.system("cls")
                 input("El grupo que ingreso no existe, ingrese uno de los anteriormente mostrados")
+            elif(len(admin["classrooms"][grupo]["campers"]) < 1):
+                os.system("cls")
+                input(f"No hay campers registrados en el grupo {grupo}")
             else:
+                os.system("cls")
                 print(f"""
                 ***************
                 *   REGLAS    *
@@ -95,7 +99,9 @@ def pruebas():
                     input(f"Campers que presentaran las pruebas del modulo {modulo}\n")
                     contador = 0
                     for key, value in camp.items():
-                        if (value[grupo][modulo]["estado"] == "RATED"): # evaluar la forma de que si un camper tiene estado filtrado pase de el para no borrarle el registro de donde estuvo
+                        if(grupo not in value):
+                            pass
+                        elif (value[grupo][modulo]["estado"] == "RATED"): # evaluar la forma de que si un camper tiene estado filtrado pase de el para no borrarle el registro de donde estuvo
                             contador += 1
                         else:
                             print(f"- Camper {value['nombre']} con identificacion {key}\n")
@@ -106,7 +112,9 @@ def pruebas():
                     else:
                         for key, value in camp.items():
                             os.system("cls")
-                            if (value[grupo][modulo]["estado"] == "UNRATED"):
+                            if(grupo not in value):
+                                pass
+                            elif (value[grupo][modulo]["estado"] == "UNRATED"):
                                 print(f"Estudiante : {value['nombre']} identificacion : {key}")
                                 proyecto = int(input(f"Ingrese la nota que el estudiante saco en el proyecto -> "))*0.6
                                 exam = int(input("Ingrese la nota que el estudiante saco en el examen -> "))*0.3
@@ -129,7 +137,7 @@ def pruebas():
                                         camp[key]["estado"] = "RIESGO"
                                     elif(filtro == 2):
                                         camp[key]["estado"] = "FILTRADO"
-                                        camp[key][grupo].clear()
+                                        camp[key].pop(grupo)
                                         admin["classrooms"][grupo]["capacidad"] += 1
                                         admin["classrooms"][grupo]["campers"].pop(key)
                                         for llave, val in admin["classrooms"][grupo]["trainer"].items():
@@ -146,7 +154,7 @@ def pruebas():
                                     file.close()
                                 os.system("cls")
                                 input("Notas guardadas exitosamente")
-                                bandera = False
+                        bandera = False
 def ruta():
     with open("data\Coordinacion.json", "r") as file:
         data = json.load(file)
@@ -264,7 +272,7 @@ def giveroom():
                                     input("Esa hora no existe, ingrese una de las que estan disponibles")
                                 elif(trai[trainer]["horario"][hora] == "OCUPADA"):
                                     os.system("cls")
-                                    input("El trainer ya tiene ocupada esas hora, igrese una diferente")
+                                    input("El trainer ya tiene ocupada esa hora, igrese una diferente")
                                 else:
                                     print("\n- Salas disponibles a esta hora\n")
                                     for key, valor in admin.get("rooms").items():
