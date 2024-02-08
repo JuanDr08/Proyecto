@@ -67,7 +67,7 @@ def pruebas():
                     print(f"- El grupo {key} no tiene campers asignados")
                 else:
                     print(f"- Grupo {key}")
-            grupo = input("\nIngrese el grupo de campers que desea realizar pruebas -> ")
+            grupo = input("\nIngrese el grupo de campers que desea realizar pruebas -> ").lower()
             if(grupo not in admin["classrooms"]):
                 os.system("cls")
                 input("El grupo que ingreso no existe, ingrese uno de los anteriormente mostrados")
@@ -89,7 +89,7 @@ def pruebas():
                     --------------------------
                     Modulo de {key}
                     """)
-                modulo = input("Ingrese el nombre del modulo que desea calificar -> ")
+                modulo = input("Ingrese el nombre del modulo que desea calificar -> ").lower()
                 if (modulo not in admin["rutas"][modul]["modulo"]):
                     os.system("cls")
                     input(f"El modulo {modulo} no existe, porfavor ingrese uno de los disponibles")
@@ -302,7 +302,7 @@ def giveroom():
                                             rout = admin["classrooms"][grupo]["ruta"]
                                             admin["classrooms"][grupo]["campers"].update({camper : camp[camper]["nombre"]})
                                             camp[camper].update({grupo : {
-                                                key : 0 for key, value in admin["rutas"][rout]["modulo"].items()
+                                                key : {"estado" : "UNRATED"} for key, value in admin["rutas"][rout]["modulo"].items()
                                                 
                                             }})
                                             camp[camper]["estado"] = "APROBADO"
