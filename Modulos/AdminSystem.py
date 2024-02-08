@@ -108,14 +108,14 @@ def pruebas():
                             os.system("cls")
                             if (value[grupo][modulo]["estado"] == "UNRATED"):
                                 print(f"Estudiante : {value['nombre']} identificacion : {key}")
-                                proyecto = int(input(f"Ingrese la nota que el estudiante saco en el proyecto -> "))
-                                exam = int(input("Ingrese la nota que el estudiante saco en el examen -> "))
-                                general = int(input("Ingrese la nota total que el estudiante saco en los trabajos generales -> "))
+                                proyecto = int(input(f"Ingrese la nota que el estudiante saco en el proyecto -> "))*0.6
+                                exam = int(input("Ingrese la nota que el estudiante saco en el examen -> "))*0.3
+                                general = int(input("Ingrese la nota total que el estudiante saco en los trabajos generales -> "))*0.1
                                 camp[key][grupo][modulo].update({
                                     "proyecto" : proyecto,
                                     "examen" : exam,
                                     "general" : general,
-                                    "total" : (proyecto+exam+general)/3,
+                                    "total" : (proyecto+exam+general),
                                     "fecha" : input("Cuando presento el camper la prueba? -> "),
                                     "estado" : "RATED"
                                 })
