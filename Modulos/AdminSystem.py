@@ -94,7 +94,34 @@ def pruebas():
                     os.system("cls")
                     input(f"El modulo {modulo} no existe, porfavor ingrese uno de los disponibles")
                 else:
-                    input(f"Estos son los campers a los que debera calificar en el modulo de {modulo}\n")
+                    os.system("cls")
+                    input(f"Campers que presentaran las pruebas del modulo {modulo}")
+                    contador = 0
+                    for key, value in camp.items():
+                        if (value[grupo][modulo] == "RATED"): # evaluar la forma de que si un camper tiene estado filtrado pase de el para no borrarle el registro de donde estuvo
+                            contador += 1
+                        else:
+                            print(f"- Camper {value['nombre']} con identificacion {key} ")
+                    if(contador == len(camp)):
+                        os.system("cls")
+                        input(f"Actualmente no hay campers del grupo {grupo} que no hayan presentado las pruebas del modulo {modulo}")
+                    else:
+                        for key, value in camp.items():
+                            os.system("cls")
+                            if (value[grupo][modulo] == "UNRATED"):
+                                print(f"Estudiante : {valor['nombre']} identificacion : {key}")
+                                proyecto = int(input(f"Ingrese la nota que el estudiante saco en el proyecto -> "))
+                                exam = int(input("Ingrese la nota que el estudiante saco en el examen -> "))
+                                general = int(input("Ingrese la nota total que el estudiante saco en los trabajos generales -> "))
+                                camp[key][grupo][modulo].update({
+                                    "proyecto" : proyecto,
+                                    "examen" : exam,
+                                    "general" : general,
+                                    "total" : proyecto+exam+general/3,
+                                    "fecha" : input("Cuando presento el camper la prueba? -> "),
+                                    "estado" : "RATED"
+                                })
+                        
 
 def ruta():
     with open("data\Coordinacion.json", "r") as file:
