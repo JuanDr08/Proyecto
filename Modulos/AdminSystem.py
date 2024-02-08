@@ -152,7 +152,7 @@ def giveroom():
                                         print(f"* {key2} Libre")
                                     else:
                                         print(f"* {key2} OCUPADA")
-                            trainer = input("Ingrese la identificacion del trainer que desea que trabaje con este grupo -> ")
+                            trainer = input("\nIngrese la identificacion del trainer que desea que trabaje con este grupo -> ")
                             if trainer not in trai:
                                 os.system("cls")
                                 input("No se ha encontrado un trainer con esta identificacion registrada, asegurese de escribirla bien")
@@ -168,7 +168,7 @@ def giveroom():
                                     print("\n- Salas disponibles a esta hora\n")
                                     for key, valor in admin.get("rooms").items():
                                         print(f"* Sala {key} en el horario de {hora} esta {valor['estado'][hora]}")
-                                    sala = input("Ingrese la sala que quiere asignar a este grupo -> ").lower()
+                                    sala = input("\nIngrese la sala que quiere asignar a este grupo -> ").lower()
                                     if(sala not in admin["rooms"]):
                                         os.system("cls")
                                         input("Esa sala no existe, ingrese una que si exista")
@@ -225,7 +225,7 @@ def giveroom():
                                         pass
                                     elif(value["estado"] == "APROBADO"):
                                         contador += 1
-                                if(contador == len(admin["seleccion"])):
+                                if(contador == len(admin["seleccion"]) and len(admin["seleccion"]) >= 1):
                                     os.system("cls")
                                     input("Los campers que aprobaron la prueba de seleccion ya se encuentran todos asignados a un grupo, por lo que no hay nada que asignar")
                                     bandera2 = False
