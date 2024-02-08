@@ -54,6 +54,48 @@ def pruebas():
         trai = json.load(file)
     with open("data\Coordinacion.json", "r") as file:
         admin = json.load(file)
+    bandera=True
+    while bandera:
+        os.system("cls")
+        if (len(admin["classrooms"]) < 1):
+            input("No hay grupos creados, debera crear al menos uno para poder crear notas")
+            bandera = False
+        else:
+            input("Grupos disponibles para realizar pruebas\n")
+            for key, valor in admin["classrooms"].items():
+                if(len(valor["campers"]) < 1):
+                    print(f"- El grupo {key} no tiene campers asignados")
+                else:
+                    print(f"- Grupo {key}")
+            grupo = input("\nIngrese el grupo de campers que desea realizar pruebas -> ")
+            if(grupo not in admin["classrooms"]):
+                os.system("cls")
+                input("El grupo que ingreso no existe, ingrese uno de los anteriormente mostrados")
+            elif(len(admin["classrooms"][grupo]["campers"]) < 1):
+                os.system("cls")
+                input(f"No puede ingresar al grupo {grupo} ya que no hay campers para realizar pruebas")
+            else:
+                print(f"""
+                ***************
+                *   REGLAS    *
+                ***************""")
+                input("1. Se le mostraran todos los modulos del grupo disponibles para calificar\ndebera ingresar exactamente el que desea calificar")
+                input("2. Una vez decidido el modulo a calificar debera ingresarle a todos los campers del grupo sus respectivas notas")
+                os.system("cls")
+                modul = admin["classrooms"][grupo]["ruta"]
+                for key, value in admin["rutas"][modul]["modulo"].items():
+                    print(f"""
+                    Modulos disponibles
+                    --------------------------
+                    Modulo de {key}
+                    """)
+                modulo = input("Ingrese el nombre del modulo que desea calificar -> ")
+                if (modulo not in admin["rutas"][modul]["modulo"]):
+                    os.system("cls")
+                    input(f"El modulo {modulo} no existe, porfavor ingrese uno de los disponibles")
+                else:
+                    input(f"Estos son los campers a los que debera calificar en el modulo de {modulo}\n")
+
 def ruta():
     with open("data\Coordinacion.json", "r") as file:
         data = json.load(file)
