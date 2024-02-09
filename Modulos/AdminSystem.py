@@ -187,10 +187,15 @@ def ruta():
             Temario {contador} = {key2} : {val}
     """)
                     contador += 1
-            data.get("rutas").update({input("Ingrese el nombre de la ruta (programa al que estara orientado el aprendizaje) -> ").lower(): {
-                "modulo" : data.get("modulos")[input("Ingrese el codigo de los modulos que asignara a esta ruta -> ")]
-            }})
-            input("Ruta creada exitosamente")
+            modulos = input("Ingrese el codigo de los modulos que asignara a esta ruta -> ")
+            if(modulos not in data["modulos"]):
+                os.system("cls")
+                input("El codigo de ese modulo no existe, porfavor ingrese uno de los mostrados")
+            else:
+                data.get("rutas").update({input("Ingrese el nombre de la ruta (programa al que estara orientado el aprendizaje) -> ").lower(): {
+                    "modulo" : data.get("modulos")[modulos]
+                }})
+                input("Ruta creada exitosamente")
         else:
             os.system("cls")
             input("No hay modulos disponibles para poder crear una ruta...")
@@ -295,16 +300,13 @@ def giveroom():
                                         admin["classrooms"][code].update({
                                             "trainer" : {trainer : trai[trainer]["nombre"]},
                                             "capacidad" : admin["rooms"][sala]["capacidad"],
-                                            "campers" : {}
-                                        })
-                                        admin["classrooms"][code].update({
+                                            "campers" : {},
                                             sala : hora,
                                             "inicio" : input("Ingrese la fecha de inicio de entrenamiento de este grupo -> "),
                                             "fin" : input("Ingrese la fecha de finalizacion de entrenamiento de este grupo -> ")
-                                        })    
+                                        })   
                                         trai[trainer].update({code : {"sala" : sala}}) 
                                         input("Trainer, Hora y sala asignada correctamente")
-                                        counter += 1
                                         with open("data\Trainers.json", "w") as file:
                                             json.dump(trai, file, indent=4)
                                             file.close()
