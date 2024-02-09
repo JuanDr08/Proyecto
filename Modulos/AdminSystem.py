@@ -73,9 +73,11 @@ def pruebas():
             if(grupo not in admin["classrooms"]):
                 os.system("cls")
                 input("El grupo que ingreso no existe, ingrese uno de los anteriormente mostrados")
+                bandera = False
             elif(len(admin["classrooms"][grupo]["campers"]) < 1):
                 os.system("cls")
                 input(f"No hay campers registrados en el grupo {grupo}")
+                bandera = False
             else:
                 os.system("cls")
                 print(f"""
@@ -450,14 +452,14 @@ def reportes():
         print("No hay grupos de entrenamiento creadas por lo que no hay campers ni trainers asociados")
     else:
         for key, value in admin["classrooms"].items():
-            if (len(value["campers"]) < 1):
-                print(f"- El grupo {key} con el trainer {value['trainer']} encargado no cuenta con campers asignados\n")
-            else:
-                print(f"Grupo {key}")
-                for llave, valor in value["trainer"]:
+            print(f"Grupo {key}")
+            for llave, valor in value["trainer"].items():
+                if(len(value["campers"]) < 1):
+                    print(f"Trainer {llave} : {valor}\n- No tiene campers asociados\n")
+                else:
                     print(f"Trainer {llave} : {valor}")
                     print("- campers asociados")
-                    for ky, val in value["campers"]:
+                    for ky, val in value["campers"].items():
                         print(f"- {ky} : {val}")
     input("\nF. Campers que perdieron y aprobaron cada modulo segun ruta de entrenamiento y trainer\n")
     if(len(admin["classrooms"]) < 1):
@@ -472,18 +474,20 @@ def reportes():
                 ruta = value["ruta"]
                 print(f"- Ruta de {ruta}")
                 for key2, value2 in admin["rutas"][ruta]["modulo"].items():
-                    print(f"* Modulo {key2}")
+                    print(f"* Modulo {key2.upper()}")
                     for key3, value3 in camp.items():
                         if(key in value3 and value3[key][key2]["estado"] == "RATED"):
                             if(value3[key][key2]["total"] > 60):
-                                print(f"El camper {key3} : {value3[nombre]} aprobo el modulo {key2} con una nota de {value3[key][key2]['total']}")
+                                print(f"El camper {key3} : {value3[nombre]} aprobo el modulo {key2.upper()} con una nota de {value3[key][key2]['total']}")
                             else:
-                                print(f"El camper {key3} : {value3[nombre]} reprobo el modulo {key2} con una nota de {value3[key][key2]['total']}")
+                                print(f"El camper {key3} : {value3[nombre]} reprobo el modulo {key2.upper()} con una nota de {value3[key][key2]['total']}")
+                        elif(key not in value3):
+                            pass
                         elif (value3[key][key2]["estado"] == "UNRATED"):
-                            print(f"modulo {key2} sin calificar aun")
+                            print(f"-> modulo sin calificar aun")
                             break
-                        elif (value3[key] == {}):
+                        elif (value3["estado"] == "FILTRADO" and admin["seleccion"][key3]["estado"] == "APROBADO"):
                             print(f"El camper {value3[nombre]} fue filtrado del grupo al perder dos modulos")
-                    os.system("pause")
+        os.system("pause")
         if(counter == len(admin["classrooms"])):
             input("Los grupos de entrenamiento creados no tienen ningun camper asignado, porfavor asigne campers a los grupos")
