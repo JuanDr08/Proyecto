@@ -1,10 +1,5 @@
 import os, json
-with open("data\Campers.json", "r") as file:
-    camp = json.load(file)
-with open("data\Trainers.json", "r") as file:
-    trai = json.load(file)
-with open("data\Coordinacion.json", "r") as file:
-    admin = json.load(file)
+
 def selection():
     with open("data\Campers.json", "r") as file:
         data = json.load(file)
@@ -26,17 +21,19 @@ def selection():
             Estado : {value.get("estado")}
         """)
                 nota = (int(input("Cual fue la nota teorica del camper? -> ")) + int(input("Cual fue la nota practica del camper? ->")))/2
+                dato.get("seleccion").update({key : {
+                    "hora" : input("A que hora presento la prueba el camper? -> "),
+                    "nota" : nota
+                }                    
+            })
                 if( nota >= 60):
                     value["estado"] = "INSCRITO"
                     input("El camper fue aprobado, ha logrado ingresar al equipo campus")
+                    dato["seleccion"][key].update({"estado" : "APROBADO"})
                 else:
                     value["estado"] = "FILTRADO"
                     input("El camper no ha logrado ingresar a campus, lo sentimos")
-                dato.get("seleccion").update({key : {
-                            "hora" : input("A que hora presento la prueba el camper? -> "),
-                            "nota" : nota
-                        }                    
-                    })
+                    dato["seleccion"][key].update({"estado" : "FILTRADO"})
             else:
                 contador += 1
         if (contador == len(data) or len(data) < 1):
@@ -53,7 +50,12 @@ def selection():
         json.dump(data, file, indent=4)
         file.close()
 def pruebas():
-    global camp, trai, admin
+    with open("data\Campers.json", "r") as file:
+        camp = json.load(file)
+    with open("data\Trainers.json", "r") as file:
+        trai = json.load(file)
+    with open("data\Coordinacion.json", "r") as file:
+        admin = json.load(file)
     bandera=True
     while bandera:
         os.system("cls")
@@ -223,7 +225,12 @@ def rooms():
         os.system("cls")
         input("Ingrese un digito correto")
 def giveroom():
-    global camp, trai, admin
+    with open("data\Campers.json", "r") as file:
+        camp = json.load(file)
+    with open("data\Trainers.json", "r") as file:
+        trai = json.load(file)
+    with open("data\Coordinacion.json", "r") as file:
+        admin = json.load(file)
     if(len(camp) < 1):
         input("No hay campers registrados para poder asignar a salas de entrenamiento")
     elif(len(trai) < 1):
@@ -363,7 +370,6 @@ def giveroom():
                                             }})
                                             camp[camper]["estado"] = "APROBADO"
                                             admin["classrooms"][grupo]["capacidad"] -= 1
-                                            admin["seleccion"][camper].update({"estado" : "APROBADO"})
                                             for key, value in trai.items():
                                                 if(grupo in value):
                                                     trai[key][grupo].update({camper : camp[camper]["nombre"]})
@@ -389,5 +395,95 @@ def giveroom():
             os.system("cls")
             input("Ingrese un digito valido")
 def reportes():
-    global camp, trai, admin
-    
+    os.system("cls")
+    with open("data\Campers.json", "r") as file:
+        camp = json.load(file)
+    with open("data\Trainers.json", "r") as file:
+        trai = json.load(file)
+    with open("data\Coordinacion.json", "r") as file:
+        admin = json.load(file)
+    counter = 0
+    nombre = "nombre"
+    input("A. Campers que se encuentran en estado inscrito\n")
+    if(len(camp) < 1):
+        print("Actualmente no hay campers registrados para observar su estado, registre unos campers y realice la prieba inicial...")
+    else:
+        counter = 0
+        for key, value in camp.items():
+            if (value["estado"] == "INSCRITO"):
+                print(f"* El camper {value['nombre']} con identificacion {key} se encuentra en estado {value['estado']}")
+            else:
+                counter += 1
+        if (counter == len(camp)):
+            print("De los campers actualmente activos ninguno se encuentra en estado INSCRITO")
+    input("\nB. Campers que aprobaron el examen inicial\n")
+    if (len(admin["seleccion"]) < 1):
+        print("No hay campers que hayan realizado la prueba de seleccion, porfavor revise si tiene campers pendientes por presentar la prueba...")
+    else:
+        counter = 0
+        for key, value in admin["seleccion"].items():
+            if (value['estado'] == 'APROBADO'):
+                print(f'* El camper {camp[key][nombre]} aprobo el examen inicial')
+            else: counter += 1 
+        if(counter == len(admin["seleccion"])):
+            print("Los campers que presentaron prueba de seleccion hasta el momento fueron filtrados")
+    input("\nC. Trainers que se encuentran trabajando actualmente en campus\n")
+    if (len(trai) < 1):
+        print('Actualmente no se ecuentran treiners trabajando en campus')
+    else:
+        for key, value in trai.items():
+            print(f"trainer {value[nombre]} con identificacion {key}")
+    input("\nD. Campers en bajo rendimiento (Riesgo)\n")
+    if (len(camp) < 1):
+        print("No hay campers registrados para poder observar los estados")
+    else:
+        counter = 0
+        for key, value in camp.items():
+            if (value["estado"] == "RIESGO"):
+                print(f"Camper {value['nombre']} con identificacion {key} se encuentra en riesgo")
+            else:
+                counter += 1
+        if(counter == len(camp)):
+            print("Actualmente no hay campers en riesgo")
+    input("\nE. Campers y trainers asociados a cada uno de los grupos de entrenamiento\n")
+    if(len(admin["classrooms"]) < 1):
+        print("No hay grupos de entrenamiento creadas por lo que no hay campers ni trainers asociados")
+    else:
+        for key, value in admin["classrooms"].items():
+            if (len(value["campers"]) < 1):
+                print(f"- El grupo {key} con el trainer {value['trainer']} encargado no cuenta con campers asignados\n")
+            else:
+                print(f"Grupo {key}")
+                for llave, valor in value["trainer"]:
+                    print(f"Trainer {llave} : {valor}")
+                    print("- campers asociados")
+                    for ky, val in value["campers"]:
+                        print(f"- {ky} : {val}")
+    input("\nF. Campers que perdieron y aprobaron cada modulo segun ruta de entrenamiento y trainer\n")
+    if(len(admin["classrooms"]) < 1):
+        input("No hay grupos de entrenamiento creados, por lo que no hay notas que que verificar")
+    else:
+        counter = 0
+        for key, value in admin["classrooms"].items():
+            if (len(value["campers"]) < 1):
+                counter += 1
+            else:
+                print(f"- Grupo {key}")
+                ruta = value["ruta"]
+                print(f"- Ruta de {ruta}")
+                for key2, value2 in admin["rutas"][ruta]["modulo"].items():
+                    print(f"* Modulo {key2}")
+                    for key3, value3 in camp.items():
+                        if(key in value3 and value3[key][key2]["estado"] == "RATED"):
+                            if(value3[key][key2]["total"] > 60):
+                                print(f"El camper {key3} : {value3[nombre]} aprobo el modulo {key2} con una nota de {value3[key][key2]['total']}")
+                            else:
+                                print(f"El camper {key3} : {value3[nombre]} reprobo el modulo {key2} con una nota de {value3[key][key2]['total']}")
+                        elif (value3[key][key2]["estado"] == "UNRATED"):
+                            print(f"modulo {key2} sin calificar aun")
+                            break
+                        elif (value3[key] == {}):
+                            print(f"El camper {value3[nombre]} fue filtrado del grupo al perder dos modulos")
+                    os.system("pause")
+        if(counter == len(admin["classrooms"])):
+            input("Los grupos de entrenamiento creados no tienen ningun camper asignado, porfavor asigne campers a los grupos")
