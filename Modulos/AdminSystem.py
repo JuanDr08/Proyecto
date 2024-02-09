@@ -393,3 +393,5 @@ def giveroom():
         except ValueError:
             os.system("cls")
             input("Ingrese un digito valido")
+def reportes():
+    pass

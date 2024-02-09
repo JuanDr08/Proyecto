@@ -39,8 +39,6 @@ def menuCoo():
         except ValueError:
             os.system("cls")
             input("Ingrese un dato valido...")
-def report():
-    pass
 def menuPrincipal():
     titulo = """
 \t\t\t\t  _____           __ _ _           
@@ -65,7 +63,7 @@ def menuPrincipal():
                 case 3:
                     camp.menu()
                 case 4:
-                    report()
+                    process.reportes()
                 case _:
                     os.system("cls")
                     print("Ingrese una opcion de las disponibles...")
