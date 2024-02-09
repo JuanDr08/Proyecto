@@ -1,7 +1,7 @@
 import os, json
-with open("data\Campers.json", "r") as file:
-    data = json.load(file)
 def create():
+    with open("data\Campers.json", "r") as file:
+        data = json.load(file)
     print("""
      --------------------------------------
     |   Formulario Para Registrar Camper   |
@@ -36,7 +36,8 @@ def create():
             file.close()
 
 def read(codigo = None):
-    global data
+    with open("data\Campers.json", "r") as file:
+        data = json.load(file)
     if(len(data) >= 1):
         if(codigo == None):
             print("""
@@ -72,7 +73,8 @@ def read(codigo = None):
     else:
         input("No hay campers registrados para poder buscar")
 def update(): # add the system to change the contact and to change the accudient, check the print error
-    global data
+    with open("data\Campers.json", "r") as file:
+        data = json.load(file)
     if (len(data) >= 1):
         while True:
             os.system("cls")
@@ -125,7 +127,8 @@ def update(): # add the system to change the contact and to change the accudient
     else:
         input("No hay campers registrados para poder buscar")
 def delete():
-    global data
+    with open("data\Campers.json", "r") as file:
+        data = json.load(file)
     if (len(data) >= 1):
         while True:
             os.system("cls")

@@ -1,10 +1,9 @@
 import os, json
-with open("data\Trainers.json", "r") as file:
-        data = json.load(file)
-with open("data\Coordinacion.json", "r") as file:
-    dato = json.load(file)
 def create():
-    global data, dato
+    with open("data\Trainers.json", "r") as file:
+        data = json.load(file)
+    with open("data\Coordinacion.json", "r") as file:
+        dato = json.load(file)
     print("""
      --------------------------------------
     |   Formulario Para Registrar Trainer  |
@@ -26,7 +25,8 @@ def create():
             json.dump(data, file, indent = 4)
             file.close()
 def read(codigo = None):
-    global data
+    with open("data\Trainers.json", "r") as file:
+        data = json.load(file)
     if(len(data) >= 1):
         if(codigo == None):
             print("""
@@ -50,7 +50,8 @@ def read(codigo = None):
     else:
         input("No hay trainers registrados para realizar esta accion...")    
 def update():
-    global data
+    with open("data\Trainers.json", "r") as file:
+        data = json.load(file)
     if (len(data) >= 1): 
         while True:
             os.system("cls")
@@ -100,7 +101,8 @@ def update():
     else:
         input("No hay trainers registrados para realizar esta accion")
 def delete():
-    global data
+    with open("data\Trainers.json", "r") as file:
+        data = json.load(file)
     if(len(data) >= 1):
         while True:
             os.system("cls")
