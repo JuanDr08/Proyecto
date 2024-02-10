@@ -24,7 +24,7 @@ In this commit I wasted a lot of time because I was experimenting with json to t
 
 ### Tener en cuenta
 
-* no permitir crear salas ni rutas vacias o que solo sean textos en blanco
+* no permitir crear salas ni rutas vacias o que solo sean textos en blanco ✔️
 * evitar bugs en los cruds: 
   * no permitir hacer ninguna ota opcion si no hay al menos un camper creado✔️
 
@@ -63,23 +63,21 @@ In this commit I wasted a lot of time because I was experimenting with json to t
 
 
 * apenas se actualiza el modulo del camper al que se le registraron notas agregar el verificador de cuantos modulos lleva perdidos y ajustar el estado segun eso ✔️
-  * si es filtrado sacarlo de la sala inmediatamente y preguntar si tambien se
-    le elimina al trainer✔️
+* si es filtrado sacarlo de la sala inmediatamente y preguntar si tambien se le elimina al trainer✔️
 
 #### CRUD CAMPER 
 
-    -	permitir modificar numero, acudiente, identificacion
-    -	al eliminar un camper, eliminar tambien su registro en todas las posibles variables
+    -	permitir modificar numero, acudiente, identificacion ✔️
+    -	al eliminar un camper, eliminar tambien su registro en todas las posibles variables ✔️
     -	verificar porque al crear un nuevo camper se le cambian los estados a los otros✔️
 
 **VERIFICAR CORRECTO FUNCIONAMIENTO**
 
-    -	Nota de prueba de seleccion ver que pasa si ingreso str
-    -	inscribir dos campers al mismo grupo y hacerlos presentar la misma prueba de modulo dos veces una en unrated y otra rated
-    -	verificar que si ingreso un codigo de modulo no existente no se guarde en el json en la creacion de ruta
-    -	ver si me deja agregar campers a una sala llena, luego filtrar uno de esa sala y volver a mirar si me deja ingresar ahora si uno nuevo
+    -	Nota de prueba de seleccion ver que pasa si ingreso str ✔️
+    -	inscribir dos campers al mismo grupo y hacerlos presentar la misma prueba de modulo dos veces una en unrated y otra rated ✔️
+    -	verificar que si ingreso un codigo de modulo no existente no se guarde en el json en la creacion de ruta ✔️
+    -	ver si me deja agregar campers a una sala llena, luego filtrar uno de esa sala y volver a mirar si me deja ingresar ahora si uno nuevo ✔️
 
 **AGREGAR**
 
-    -	Modificacion manual de los estados de campers en el menu de coordinacion
-    -	reportes
+    -	reportes✔️
