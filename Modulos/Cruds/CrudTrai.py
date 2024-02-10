@@ -9,7 +9,7 @@ def create():
     |   Formulario Para Registrar Trainer  |
      --------------------------------------
 """)
-    identi = input("Ingrese el numero de identificacion del trainer -> ")
+    identi = input("Ingrese el numero de identificacion del trainer (Tenga en cuenta que luego no se podra modificar) -> ")
     nombre = input("Ingrese nombre completo del trainer -> ")
     if (identi == "" or identi == " " or nombre == "" or nombre == " "):
         os.system("cls")
@@ -79,8 +79,14 @@ def update():
                     match(opc):
                         case 1:
                             os.system("cls")
-                            input("Solo puede cambiar el nombre -> ")
-                            data[tarjeta]["nombre"] = input("Ingrese el cambio de nombre del trainer -> ").upper()
+                            input("Solo puede cambiar el nombre")
+                            name = input("Ingrese el cambio de nombre del trainer -> ").upper()
+                            if(name == "" or name == " "):
+                                os.system("cls")
+                                input("No puede cambiar un dato a algo vacio")
+                                break
+                            else:
+                                data[tarjeta]["nombre"] = name
                             with open("data\Trainers.json", "w") as file:
                                 json.dump(data, file, indent = 4)
                                 file.close()
