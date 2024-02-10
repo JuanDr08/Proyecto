@@ -100,7 +100,7 @@ def pruebas():
                     input(f"El modulo {modulo} no existe, porfavor ingrese uno de los disponibles")
                 else:
                     os.system("cls")
-                    input(f"Campers que presentaran las pruebas del modulo {modulo}\n")
+                    print(f"Campers que presentaran las pruebas del modulo {modulo}\n")
                     contador = 0
                     for key, value in camp.items():
                         if(grupo not in value):
@@ -109,11 +109,12 @@ def pruebas():
                             contador += 1
                         else:
                             print(f"- Camper {value['nombre']} con identificacion {key}\n")
-                    os.system("pause")
-                    if(contador == len(camp)):
+                    if(contador == len(admin["classrooms"][grupo]["campers"])):
                         os.system("cls")
                         input(f"Actualmente no hay campers del grupo {grupo} que no hayan presentado las pruebas del modulo {modulo}")
+                        bandera = False
                     else:
+                        os.system("pause")
                         for key, value in camp.items():
                             os.system("cls")
                             if(grupo not in value):
@@ -170,40 +171,47 @@ def ruta():
     input("Para crear una ruta debera tener modulos creados, lo primero que hara sera crear los modulos a asignar (enter para continuar)")
     input("Cada modulo tiene 5 submodulos, los cuales son los pasos a seguir para completar el modulo")
     os.system("cls")
-    if (int(input("1. crear modulos\n0. usar modulos ya creados\n-> "))):
-        for x in range(int(input("Cuantos modulos desea agregar? -> "))):
+    opc = int(input("1. crear modulos\n2. usar modulos ya creados\n3. Cancelar\n-> "))
+    match(opc):
+        case 1:
             os.system("cls")
-            data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
-                input(f"Ingrese el nombre del modulo {x + 1} -> ").lower() : input("Ingrese el temario -> ").upper()for x in range(5)
-            }})
-        input("Modulo creado exitosamente, falta agregarlo a una ruta")
-    else:
-        os.system("cls")
-        if (len(data.get("modulos")) >= 1):
-            print("Modulos disponibles para asignar a la ruta...")
-            for key, value in data.get("modulos").items():
-                print(f"""
-        Codigo : {key}
-    """)        
-                contador = 1
-                for key2, val in data.get("modulos")[key].items():
-                    print(f"""
-            Temario {contador} = {key2} : {val}
-    """)
-                    contador += 1
-            rut = input("Ingrese el nombre de la ruta (programa al que estara orientado el aprendizaje) -> ").lower()
-            modulos = input("Ingrese el codigo de los modulos que asignara a esta ruta -> ")
-            if(modulos not in data["modulos"]):
+            for x in range(int(input("Cuantos modulos desea agregar? -> "))):
                 os.system("cls")
-                input("El codigo de ese modulo no existe, porfavor ingrese uno de los mostrados")
-            else:
-                data.get("rutas").update({rut : {
-                    "modulo" : data.get("modulos")[modulos]
+                data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
+                    input(f"Ingrese el nombre del modulo {x + 1} -> ").lower() : input("Ingrese el temario -> ").upper()for x in range(5)
                 }})
-                input("Ruta creada exitosamente")
-        else:
+                input("Modulo creado exitosamente, falta agregarlo a una ruta")
+        case 2:
             os.system("cls")
-            input("No hay modulos disponibles para poder crear una ruta...")
+            if (len(data.get("modulos")) >= 1):
+                print("Modulos disponibles para asignar a la ruta...")
+                for key, value in data.get("modulos").items():
+                    print(f"""
+            Codigo : {key}
+        """)        
+                    contador = 1
+                    for key2, val in data.get("modulos")[key].items():
+                        print(f"""
+                Temario {contador} = {key2} : {val}
+        """)
+                        contador += 1
+                rut = input("Ingrese el nombre de la ruta (programa al que estara orientado el aprendizaje) -> ").lower()
+                if(rut == "" or rut == " "):
+                    os.system("cls")
+                    input("El nombre de la sala no puede estar vacio")
+                else:
+                    modulos = input("Ingrese el codigo de los modulos que asignara a esta ruta -> ")
+                    if(modulos not in data["modulos"]):
+                        os.system("cls")
+                        input("El codigo de ese modulo no existe, porfavor ingrese uno de los mostrados")
+                    else:
+                        data.get("rutas").update({rut : {
+                            "modulo" : data.get("modulos")[modulos]
+                        }})
+                        input("Ruta creada exitosamente")
+            else:
+                os.system("cls")
+                input("No hay modulos disponibles para poder crear una ruta...")
     with open("data\Coordinacion.json", "w") as file:
         json.dump(data, file, indent = 4)
 def rooms():
@@ -211,19 +219,23 @@ def rooms():
         data = json.load(file)
     try:
         sala = input("Ingrese el nombre de la sala -> ").lower()
-        if (sala not in data.get("rooms")):
-            data.get("rooms").update({sala : {
-                "capacidad" : int(input("Ingrese la capacidad maxima de la sala -> ")),
-                "estado" : {
-                    value : "VACIO" for key, value in data.get("horarios").items()
-                }
-            }})
-            with open("data\Coordinacion.json", "w") as file:
-                json.dump(data, file, indent = 4)
-                file.close()
-        else:
+        if(sala == "" or sala == " "):
             os.system("cls")
-            input("La sala ya existe, pruebe otro nombre")
+            input("Empiece el nombre con digitos diferentes a espacios en blanco o vacios")
+        else:
+            if (sala not in data.get("rooms")):
+                data.get("rooms").update({sala : {
+                    "capacidad" : int(input("Ingrese la capacidad maxima de la sala -> ")),
+                    "estado" : {
+                        value : "VACIO" for key, value in data.get("horarios").items()
+                    }
+                }})
+                with open("data\Coordinacion.json", "w") as file:
+                    json.dump(data, file, indent = 4)
+                    file.close()
+            else:
+                os.system("cls")
+                input("La sala ya existe, pruebe otro nombre")
     except ValueError:
         os.system("cls")
         input("Ingrese un digito correto")
@@ -259,6 +271,7 @@ def giveroom():
                         if (ruta not in admin["rutas"]):
                             os.system("cls")
                             input("Esa ruta no existe, porfavor ingrese una de las disponibles")
+                            break
                         else:
                             os.system("cls")
                             input("Ruta añadida al grupo exitosamente")
@@ -339,7 +352,7 @@ def giveroom():
                                 for key,value in admin["seleccion"].items():
                                     if("estado" not in value):
                                         pass
-                                    elif(value["estado"] == "APROBADO" or value["estado"] == "FILTRADO"):
+                                    elif((value["estado"] == "APROBADO" and camp[key]["estado"] == "APROBADO") or (value["estado"] == "FILTRADO" and camp[key]["estado"] == "FILTRADO") or (value["estado"] == "APROBADO" and camp[key]["estado"] == "FILTRADO") or (value["estado"] == "APROBADO" and camp[key]["estado"] == "RIESGO")):
                                         contador += 1
                                 if(contador == len(admin["seleccion"]) and len(admin["seleccion"]) >= 1):
                                     os.system("cls")
@@ -364,30 +377,32 @@ def giveroom():
                                         input("Ese camper no se encuentra en el estado requerido para asignar ruta, pruebe con otro")
                                     else:
                                         os.system("cls")
-                                        if(int(input("Esta seguro que desea agregar al camper a este aula?\n1. si\n0. no\n-> "))):
-                                            rout = admin["classrooms"][grupo]["ruta"]
-                                            admin["classrooms"][grupo]["campers"].update({camper : camp[camper]["nombre"]})
-                                            camp[camper].update({grupo : {
-                                                key : {"estado" : "UNRATED"} for key, value in admin["rutas"][rout]["modulo"].items()
-                                                
-                                            }})
-                                            camp[camper]["estado"] = "APROBADO"
-                                            admin["classrooms"][grupo]["capacidad"] -= 1
-                                            for key, value in trai.items():
-                                                if(grupo in value):
-                                                    trai[key][grupo].update({camper : camp[camper]["nombre"]})
-                                            with open("data\Campers.json", "w") as file:
-                                                json.dump(camp, file, indent = 4)
-                                            with open("data\Trainers.json", "w") as file:
-                                                json.dump(trai, file, indent = 4)
-                                            with open("data\Coordinacion.json", "w") as file:
-                                                json.dump(admin, file, indent = 4)
-                                            os.system("cls")
-                                            input("Camper añadido exitosamente")
-                                            os.system("cls")
-                                            bandera2 = bool(int(input("Desea añadir otro camper?\n1. si\n0. no\n-> ")))
-                                        else:
-                                            bandera2 = True
+                                        opc = int(input("Esta seguro que desea agregar al camper a este aula?\n1. Si\n2. No\n3. Cancelar\n-> "))
+                                        match(opc):
+                                            case 1:
+                                                rout = admin["classrooms"][grupo]["ruta"]
+                                                admin["classrooms"][grupo]["campers"].update({camper : camp[camper]["nombre"]})
+                                                camp[camper].update({grupo : {
+                                                    key : {"estado" : "UNRATED"} for key, value in admin["rutas"][rout]["modulo"].items()
+                                                    
+                                                }})
+                                                camp[camper]["estado"] = "APROBADO"
+                                                admin["classrooms"][grupo]["capacidad"] -= 1
+                                                for key, value in trai.items():
+                                                    if(grupo in value):
+                                                        trai[key][grupo].update({camper : camp[camper]["nombre"]})
+                                                with open("data\Campers.json", "w") as file:
+                                                    json.dump(camp, file, indent = 4)
+                                                with open("data\Trainers.json", "w") as file:
+                                                    json.dump(trai, file, indent = 4)
+                                                with open("data\Coordinacion.json", "w") as file:
+                                                    json.dump(admin, file, indent = 4)
+                                                os.system("cls")
+                                                input("Camper añadido exitosamente")
+                                                os.system("cls")
+                                                bandera2 = bool(int(input("Desea añadir otro camper?\n1. si\n0. no\n-> ")))
+                                            case 3:
+                                                bandera2 = False
                         else:
                             input("No hay clases creadas para asignar a algun camper")
                             bandera2 = False
@@ -426,7 +441,7 @@ def reportes():
         counter = 0
         for key, value in admin["seleccion"].items():
             if (value['estado'] == 'APROBADO'):
-                print(f'* El camper {camp[key][nombre]} aprobo el examen inicial')
+                print(f'* El camper {key} : {camp[key][nombre].lower()} -> APROBO el examen inicial')
             else: counter += 1 
         if(counter == len(admin["seleccion"])):
             print("Los campers que presentaron prueba de seleccion hasta el momento fueron filtrados")
@@ -443,7 +458,7 @@ def reportes():
         counter = 0
         for key, value in camp.items():
             if (value["estado"] == "RIESGO"):
-                print(f"Camper {value['nombre']} con identificacion {key} se encuentra en riesgo")
+                print(f"Camper {value['nombre'].lower()} con identificacion {key} se encuentra en RIESGO")
             else:
                 counter += 1
         if(counter == len(camp)):
@@ -459,7 +474,7 @@ def reportes():
                     print(f"Trainer {llave} : {valor}\n- No tiene campers asociados\n")
                 else:
                     print(f"Trainer {llave} : {valor}")
-                    print("- campers asociados")
+                    print("Campers asociados:")
                     for ky, val in value["campers"].items():
                         print(f"- {ky} : {val}")
     input("\nF. Campers que perdieron y aprobaron cada modulo segun ruta de entrenamiento y trainer\n")
@@ -471,24 +486,31 @@ def reportes():
             if (len(value["campers"]) < 1):
                 counter += 1
             else:
-                print(f"Grupo {key}")
+                print(f"""
+        *********************
+             Grupo {key}    
+        *********************
+""")
                 ruta = value["ruta"]
-                print(f"            Ruta de {ruta}\n")
+                print(f"Ruta de {ruta.upper()}\n")
+                print(f"Trainer encargado {value['trainer']}\n")
                 for key2, value2 in admin["rutas"][ruta]["modulo"].items():
-                    print(f"            * Modulo {key2.upper()}\n")
+                    print(f"""
+     ______________________
+      Modulo {key2.upper()}               
+     ----------------------
+""")
                     for key3, value3 in camp.items():
                         if(key in value3 and value3[key][key2]["estado"] == "RATED"):
                             if(value3[key][key2]["total"] > 60):
-                                print(f"El camper {key3} : {value3[nombre]} aprobo el modulo {key2.upper()} con una nota de {value3[key][key2]['total']}\n")
+                                print(f"El camper {key3} : {value3[nombre].lower()} APROBO el modulo con una nota de {value3[key][key2]['total']}\n")
                             else:
-                                print(f"El camper {key3} : {value3[nombre]} reprobo el modulo {key2.upper()} con una nota de {value3[key][key2]['total']}\n")
+                                print(f"El camper {key3} : {value3[nombre].lower()} REPROBO el modulo con una nota de {value3[key][key2]['total']}\n")
                         elif(key not in value3):
                             pass
                         elif (value3[key][key2]["estado"] == "UNRATED"):
-                            print(f"-> modulo sin calificar aun\n")
-                            break
-                        elif (value3["estado"] == "FILTRADO" and admin["seleccion"][key3]["estado"] == "APROBADO"):
-                            print(f"El camper {value3[nombre]} fue filtrado del grupo al perder dos modulos")
+                            print(f"-> modulo de {key3} : {value3[nombre].lower()} SIN CALIFICAR aun\n")
+                        
         if(counter == len(admin["classrooms"])):
             input("Los grupos de entrenamiento creados no tienen ningun camper asignado, porfavor asigne campers a los grupos")
         os.system("pause")
