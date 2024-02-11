@@ -33,29 +33,29 @@ In this commit I wasted a lot of time because I was experimenting with json to t
 **Pruebas Examenes Modulos**
 
     * solo a grupos ya creados ✔️
-
+    
     * ingresasr grupo a calificar✔️
-
+    
     * verificar si el grupo existe ✔️
-
+    
     * con campers asignados✔️
-
+    
     * opcion para calificar 1 modulo especifico ✔️
-
+    
     * verificar que el modulo exista✔️
-
+    
     * calificacion camper x camper✔️
-
+    
     * verificar que camper exista✔️
-
+    
     * verificar que el modulo no este calificado, sino que no aparezca✔️
-
+    
     * cambiar estado de modulo a calificado o no calificado ✔️
-
+    
     * si pierde un modulo pasa a riesgo ✔️
-
+    
     * si pierde dos pasa a filtrado ✔️
-
+    
     * sumar uno a la sala del estudiante ✔️
 
 
@@ -81,3 +81,7 @@ In this commit I wasted a lot of time because I was experimenting with json to t
 **AGREGAR**
 
     -	reportes✔️
+
+###### 
+
+# 						FINALIZADO
