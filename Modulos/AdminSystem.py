@@ -214,6 +214,7 @@ def ruta():
                 input("No hay modulos disponibles para poder crear una ruta...")
     with open("data\Coordinacion.json", "w") as file:
         json.dump(data, file, indent = 4)
+        file.close()
 def rooms():
     with open("data\Coordinacion.json", "r") as file:
         data = json.load(file)
@@ -393,10 +394,13 @@ def giveroom():
                                                         trai[key][grupo].update({camper : camp[camper]["nombre"]})
                                                 with open("data\Campers.json", "w") as file:
                                                     json.dump(camp, file, indent = 4)
+                                                    file.close()
                                                 with open("data\Trainers.json", "w") as file:
                                                     json.dump(trai, file, indent = 4)
+                                                    file.close()
                                                 with open("data\Coordinacion.json", "w") as file:
                                                     json.dump(admin, file, indent = 4)
+                                                    file.close()
                                                 os.system("cls")
                                                 input("Camper añadido exitosamente")
                                                 os.system("cls")

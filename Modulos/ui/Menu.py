@@ -66,9 +66,7 @@ def menuPrincipal():
                     process.reportes()
                 case _:
                     os.system("cls")
-                    print("Ingrese una opcion de las disponibles...")
-                    os.system("pause")
+                    input("Ingrese una opcion de las disponibles...")
         except ValueError:
             os.system("cls")
-            print("Porfavor ingrese una opcion valida")
-            os.system("pause")
+            input("Porfavor ingrese una opcion valida")

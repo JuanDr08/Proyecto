@@ -8,32 +8,38 @@ def create():
      --------------------------------------
 """)
     identi = input("Ingrese el numero de identificacion del camper (Tenga en cuenta que luego no se podra modificar) -> ")
-    nombre = input("Ingrese el nombre del camper (Tenga en cuenta que luego no se podra modificar) -> ").upper()
-    apellido = input("Ingrese el apellido del camper -> ").upper()
-    direccion = input("Ingrese la direccion del camper -> ").upper()
-    if(identi == "" or nombre == "" or apellido == "" or direccion == "" or identi == " " or nombre == " " or apellido == " " or direccion == " "):
+    if(identi in data):
         os.system("cls")
-        input("No puede registrar cadenas vacias, ingrese caracteres porfavor")
+        input("Esa identificacion ya existe, registre una diferente")
     else:
-        edad = int(input("Cuantos años tiene el camper? -> "))
-        data.update({identi :{
-            "nombre" : nombre,
-            "apellido" : apellido,
-            "direccion" : direccion,
-            "edad" : edad,
-            "estado": "PRE-INSCRITO",
-            "contacto" : {
-                input("- Va a ingresar un fijo o celular? -> ").upper() : int(input("Ingrese el numero de contacto -> "))
-            },
-            "acudiente" :  {
-                'nombre' : f"{input('Ingrese nombre del tutor -> ') if(edad<18) else 'NOAPLICA'}",
-                'cedula' : f"{input('Ingrese cedula del tutor -> ') if(edad<18) else 'NOAPLICA'}"
-            }
-        }})
+        nombre = input("Ingrese el nombre del camper -> ").upper()
+        apellido = input("Ingrese el apellido del camper -> ").upper()
+        direccion = input("Ingrese la direccion del camper -> ").upper()
+        fijcel = input("- Va a ingresar un fijo o celular? -> ").upper()
+        numcel = int(input(f"Ingrese el numero de {fijcel} -> "))
+        if(identi == "" or nombre == "" or apellido == "" or direccion == "" or fijcel == "" or fijcel == " " or identi == " " or nombre == " " or apellido == " " or direccion == " "):
+            os.system("cls")
+            input("No puede registrar cadenas vacias, ingrese caracteres porfavor")
+        else:
+            edad = int(input("Cuantos años tiene el camper? -> "))
+            data.update({identi :{
+                "nombre" : nombre,
+                "apellido" : apellido,
+                "direccion" : direccion,
+                "edad" : edad,
+                "estado": "PRE-INSCRITO",
+                "contacto" : {
+                    fijcel : numcel
+                },
+                "acudiente" :  {
+                    'nombre' : f"{input('Ingrese nombre del tutor -> ') if(edad<18) else 'NOAPLICA'}",
+                    'cedula' : f"{input('Ingrese cedula del tutor -> ') if(edad<18) else 'NOAPLICA'}"
+                }
+            }})
 
-        with open("data\Campers.json", "w") as file:
-            json.dump(data, file, indent = 4)
-            file.close()
+            with open("data\Campers.json", "w") as file:
+                json.dump(data, file, indent = 4)
+                file.close()
 
 def read(codigo = None):
     with open("data\Campers.json", "r") as file:
@@ -75,6 +81,10 @@ def read(codigo = None):
 def update(): # add the system to change the contact and to change the accudient, check the print error
     with open("data\Campers.json", "r") as file:
         data = json.load(file)
+    with open("data\Trainers.json", "r") as file:
+        trai = json.load(file)
+    with open("data\Coordinacion.json", "r") as file:
+        admin = json.load(file)
     if (len(data) >= 1):
         while True:
             os.system("cls")
@@ -93,9 +103,14 @@ def update(): # add the system to change the contact and to change the accudient
                 read(tarjeta)
                 print("""
         ¿Esta seguro que desea actualizar al camper?
-                1. Si
-                2. No
-                3.Cancelar
+        
+        Se ajustaran los cambios automaticamente a todas
+        las areas donde se encuentre la informacion
+        modificada del camper
+        
+        1. Si
+        2. No
+        3.Cancelar
             """)
                 try:
                     opc = int(input("Ingrese la opcion correspondiente -> "))
@@ -113,8 +128,19 @@ def update(): # add the system to change the contact and to change the accudient
                                 break
                             elif(actu == "nombre"):
                                 os.system("cls")
-                                input("No puede modificar el nombre")
-                                break
+                                name = input("Ingrese el nuevo nombre del camper -> ").upper()
+                                if (name == "" or name == " "):
+                                    os.system("cls")
+                                    input("No puede cambiar a nombres vacios")
+                                else:
+                                    data[tarjeta][actu] = name
+                                    if (len(admin["classrooms"]) >= 1):
+                                        for key, value in admin["classrooms"].items():
+                                            if (len(value["campers"]) >= 1 and tarjeta in value["campers"]):
+                                                value["campers"][tarjeta] = name
+                                                for key2, value2 in trai.items():
+                                                    if(key2 in value["trainer"]):
+                                                        value2[key][tarjeta] = name
                             elif(actu == "contacto"):
                                 fice = input("- Va a ingresar un fijo o celular? -> ").upper()
                                 if (fice == "" or fice == " "):
@@ -137,14 +163,21 @@ def update(): # add the system to change the contact and to change the accudient
                                     input("No puede disminuir su edad, usted va creciendo y volviedose mas viejo!!!!")
                             else:
                                 newInfo = input("ingrese la nueva informacion -> ").upper()
-                                if (newInfo == "" or newInfo(" ")):
+                                if (newInfo == "" or newInfo == " "):
                                     os.system("cls")
                                     input("No puede actualizar cambios en blanco")
                                     break
                                 else:
                                     data[tarjeta][actu] = newInfo
+                            with open("data\Trainers.json", "w") as file:
+                                json.dump(trai, file, indent = 4)
+                                file.close()
+                            with open("data\Coordinacion.json", "w") as file:
+                                json.dump(admin, file, indent = 4)
+                                file.close()
                             with open("data\Campers.json", "w") as file:
                                 json.dump(data, file, indent = 4)
+                                file.close()
                             os.system("cls")
                             read(tarjeta)
                             input("Camper modificado exitosamente... ")
@@ -208,10 +241,13 @@ def delete():
                             data.pop(tarjeta)
                             with open("data\Campers.json", "w") as file:
                                 json.dump(data, file, indent = 4)
+                                file.close()
                             with open("data\Trainers.json", "w") as file:
                                 json.dump(trai, file, indent = 4)
+                                file.close()
                             with open("data\Coordinacion.json", "w") as file:
                                 json.dump(admin, file, indent = 4)
+                                file.close()
                             os.system("cls")
                             input("Camper eliminado exitosamente... ")
                             break
