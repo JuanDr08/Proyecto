@@ -175,12 +175,11 @@ def ruta():
     match(opc):
         case 1:
             os.system("cls")
-            for x in range(int(input("Cuantos modulos desea agregar? -> "))):
-                os.system("cls")
-                data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
-                    input(f"Ingrese el nombre del modulo {x + 1} -> ").lower() : input("Ingrese el temario -> ").upper()for x in range(5)
-                }})
-                input("Modulo creado exitosamente, falta agregarlo a una ruta")
+            os.system("cls")
+            data.get("modulos").update({str(len(data.get("modulos")) + 1).zfill(4) : {
+                input(f"Ingrese el nombre del modulo {x + 1} -> ").lower() : input("Ingrese el temario -> ").upper()for x in range(int(input("Cuantos modulos desea agregar? -> ")))
+            }})
+            input("Modulo creado exitosamente, falta agregarlo a una ruta")
         case 2:
             os.system("cls")
             if (len(data.get("modulos")) >= 1):
